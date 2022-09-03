@@ -52,10 +52,21 @@ const userExtractor = (req, res, next) => {
   next()
 }
 
+const ensureAuthenticated = (req, res, next) => {
+  if (req.user) {
+    return next()
+  }
+  res.redirect('/')
+}
+
+
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
-  userExtractor
+  userExtractor,
+  ensureAuthenticated
 }
+
+

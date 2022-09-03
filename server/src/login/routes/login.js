@@ -4,3 +4,5 @@ const { loginHandler } = require('../controller/login')
 loginRouter.post('/login', async (req, res) => {
   loginHandler(req, res)
 })
+
+module.exports = loginRouter

@@ -1,7 +1,7 @@
 {
-  "name": "my-webpack-project",
+  "name": "Server - innovation project",
   "version": "1.0.0",
-  "description": "My webpack project",
+  "description": "Backend for the innovation project",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,7 +22,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.2",
     "eslint": "^8.23.0",
-    "nodemo": "^1.0.0",
+    "nodemon": "^2.0.19",
     "prettier": "^2.7.1"
   }
 }

@@ -1,10 +1,8 @@
-const logger = require('./logger')
+const { logger } = require('./logger')
 const jwt = require('jsonwebtoken')
 
 const requestLogger = (req, res, next) => {
-  logger.info('Method:', req.method)
-  logger.info('Path:', req.path)
-  logger.info('Body:', req.body)
+  logger.info(`Method: ${req.method} | Path: ${req.path} | Body: ${JSON.stringify(req.body, null, 2)}`)
   next()
 }
 

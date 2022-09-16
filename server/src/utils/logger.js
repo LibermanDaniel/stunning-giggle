@@ -1,9 +1,10 @@
-const info = (...params) => {
-  console.log(...params)
-}
+const winston = require('winston')
 
-const error = (...params) => {
-  console.error(...params)
-}
+const logger = winston.createLogger({
+  transports: [new winston.transports.Console()],
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.simple()),
+})
 
-module.exports = { info, error }
+module.exports = { logger }

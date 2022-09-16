@@ -1,15 +1,19 @@
 const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema({
-  username: String,
+  username: { type: String, required: true, unique: true },
   name: String,
   password: String,
-  email: String,
+  email: { type: String, required: true, unique: true },
   resetPasswordToken: String,
-  settings: [
+  settings: {
+    type: mongoose.Schema.Types.ObjectID,
+    ref: 'Settings'
+  },
+  cube: [
     {
       type: mongoose.Schema.Types.ObjectID,
-      ref: 'Settings'
+      ref: 'Cube'
     }
   ]
 }, { timestamps: true })

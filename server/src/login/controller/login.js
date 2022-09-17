@@ -1,5 +1,4 @@
 const User = require('../../models/user')
-const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const { logger } = require('../../utils/logger')
 const config = require('../../config/config')
@@ -17,9 +16,8 @@ const loginHandler = async (req, res) => {
         id: user._id
       }
       const token = jwt.sign(userForToken, config.jwtSecret, { expiresIn: 60 * 60 })
-      passport.authenticate('local')
       res.cookie('token', token, { httpOnly: true })
-      res.status(200).send({ token, username, name: user.name })
+      res.status(200).send({ token, msg: 'OK' })
     }
   }
   catch (err) {

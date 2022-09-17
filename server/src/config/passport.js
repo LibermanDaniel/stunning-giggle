@@ -1,10 +1,10 @@
 const LocalStrategy = require('passport-local').Strategy
 const User = require('../models/user')
-const logger = require('../logger')
+const { logger } = require('../utils/logger')
 const bcrypt = require('bcrypt')
 
 const passpotLocal = async (passport) => {
-  passport.use(new LocalStrategy(async (username, password, done) => {
+  await passport.use(new LocalStrategy(async (username, password, done) => {
     try {
       const user = await User.findOne({ username: username })
       if (!user) {
@@ -12,7 +12,7 @@ const passpotLocal = async (passport) => {
       }
       bcrypt.compare(password, user.password, (err, match) => {
         if (err) {
-          throw new Error('password is not a match')
+          logger.error(err)
         }
         if (match) {
           return done(null, user)

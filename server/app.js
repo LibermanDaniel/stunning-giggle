@@ -10,7 +10,7 @@ const config = require('./src/config/config')
 const mongoose = require('mongoose')
 const passport = require('passport')
 const session = require('express-session')
-const cookieParser = require('cookie-parser')
+const passportLocal = require('./src/config/passport')
 const mongoUrl = config.MONGODB_URI
 
 mongoose.connect(mongoUrl, async (err) => {
@@ -20,15 +20,15 @@ mongoose.connect(mongoUrl, async (err) => {
   logger.info('Connected to MongoDB')
 })
 
+
+
 app.use(cors())
 app.use(express.json())
+
 app.use(bodyParser.urlencoded({ extended: true }))
+
 app.use(middleware.requestLogger)
-app.use('/api/', loginRouter)
-app.use('/api/', registerRouter)
-
-
-app.use(cookieParser())
+app.use(middleware.errorHandler)
 
 app.use(session({
   secret: config.sessionSecret,
@@ -36,11 +36,12 @@ app.use(session({
   saveUninitialized: true,
 }))
 
-
+passportLocal(passport)
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use(middleware.errorHandler)
-app.use(middleware.unknownEndpoint)
+app.use('/api/', loginRouter)
+app.use('/api/', registerRouter)
+
 module.exports = app
 

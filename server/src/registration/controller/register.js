@@ -12,7 +12,7 @@ const registerationHandler = async (req, res) => {
     }
 
     const encryptedPassword = bcrypt.hashSync(password, salt)
-    const user = new User({ username, encryptedPassword, email, name })
+    const user = new User({ username, password: encryptedPassword, email, name })
     user.save(err => {
       if (err) {
         logger.error('registerationHandler | Error occurred:', err)

@@ -1,7 +1,10 @@
 const dashboard = () => {
   return (
     <div>
-      <h1>MOI</h1>
+      <h1>Welcome to the dashboard</h1>
+
+      <div>
+      </div>
     </div>
   )
 }

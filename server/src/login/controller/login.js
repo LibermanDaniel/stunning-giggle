@@ -17,7 +17,7 @@ const loginHandler = async (req, res) => {
       }
       const token = jwt.sign(userForToken, config.jwtSecret, { expiresIn: 60 * 60 })
       res.cookie('token', token, { httpOnly: true })
-      res.status(200).send({ token, msg: 'OK' })
+      res.status(200).send({ token, username, msg: 'OK' })
     }
   }
   catch (err) {

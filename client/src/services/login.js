@@ -1,10 +1,15 @@
 import axios from 'axios'
+
 const baseUrl = '/api/login'
+
 let token;
+
 const login = async (credentials) => {
-  const response = await axios.post(baseUrl, credentials)
-  console.log(response)
-  return response.data
+  const { data } = await axios.post(baseUrl, credentials)
+  if (data.msg === 'OK') {
+    return data
+  }
+  return null
 }
 
 const setToken = (newToken) => {

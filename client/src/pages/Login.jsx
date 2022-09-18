@@ -1,25 +1,31 @@
 import { useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import loginSerivce from '../services/login'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 
+
 const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  const navigate = useNavigate()
 
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginSerivce.login({
+      const data = await loginSerivce.login({
         username, password
       })
-      loginSerivce.setToken(user.token)
-      setUser(user)
-      setPassword('')
-      setUsername('')
+      if (data === null) {
+        navigate('/login')
+      } else {
+        loginSerivce.setToken(data.token)
+        setPassword('')
+        setUsername('')
+        navigate('/dashboard')
+      }
     } catch (error) {
       console.log(error)
     }

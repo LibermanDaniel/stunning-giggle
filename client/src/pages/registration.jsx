@@ -24,6 +24,8 @@ export default function SignUp() {
     });
   };
 
+  console.log('merge me')
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

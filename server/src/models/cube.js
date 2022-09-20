@@ -2,12 +2,12 @@ const mongoose = require('mongoose')
 
 const cubeSchema = mongoose.Schema({
   config: {
-    side_one: { type: String, required: true },
-    side_two: { type: String, required: true },
-    side_three: { type: String, required: true },
-    side_four: { type: String, required: true },
-    side_five: { type: String, required: true },
-    side_six: { type: String, required: true },
+    side_one: { type: Object, required: true },
+    side_two: { type: Object, required: true },
+    side_three: { type: Object, required: true },
+    side_four: { type: Object, required: true },
+    side_five: { type: Object, required: true },
+    side_six: { type: Object, required: true },
   },
   user: {
     type: mongoose.Schema.Types.ObjectID,

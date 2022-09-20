@@ -1,6 +1,6 @@
 import React from 'react'
 import Login from './pages/login'
-import Registration from './pages/registration'
+import Registration from './pages/Registration'
 
 
 function App() {
@@ -11,8 +11,8 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <Login/>
-        <Registration/>
+        <Login />
+        <Registration />
         <a
           className="App-link"
           href="https://reactjs.org"

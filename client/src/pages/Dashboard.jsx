@@ -3,6 +3,9 @@ import { useState } from 'react'
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 
+import { Canvas } from "@react-three/fiber"
+import { OrbitControls } from "@react-three/drei"
+import Box from '../components/Box'
 
 const Dashboard = () => {
   const [parameter, setParameter] = useState(null)
@@ -143,6 +146,12 @@ const Dashboard = () => {
   return (
     <Container>
       <h1>Welcome to the dashboard</h1>
+      <Canvas style={{ height: "500px" }}>
+        <OrbitControls enableZoom={false} />
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[-2, 5, 2]} intensity={1} />
+        <Box />
+      </Canvas>
       <p>Set functionality</p>
       <Form.Select aria-label="Default select example" onChange={handleClick}>
         <option id='0' defaultValue hidden>Select function</option>
@@ -154,5 +163,6 @@ const Dashboard = () => {
     </Container >
   )
 }
+
 
 export default Dashboard

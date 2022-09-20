@@ -1,115 +1,79 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from 'react';
+import registerService from '../services/register'
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Card from 'react-bootstrap/Card';
 
+const Registration = () => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
 
-const theme = createTheme();
+  const handleRegistration = async (event) => {
+    event.preventDefault()
+    try {
+      await registerService.register({ username, password, email })
+      setPassword('')
+      setUsername('')
+      setEmail('')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const handleUsernameChange = (event) => {
+    event.preventDefault()
+    setUsername(event.target.value)
+  }
 
+  const handlePasswordChange = (event) => {
+    event.preventDefault()
+    setPassword(event.target.value)
+  }
+
+  const handleEmailChange = (event) => {
+    event.preventDefault()
+    setEmail(event.target.value)
+  }
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: '#39FF13' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="user-name"
-                  name="userName"
-                  required
-                  fullWidth
-                  id="userName"
-                  label="Username"
-                  autoFocus
-                />
-              </Grid>
+    <Card style={{ width: '50rem' }} className={'mx-auto'}>
+      <Card.Title className={'p-2 fs-1'}>Registration</Card.Title>
+      <Card.Body>
+        <Form onSubmit={handleRegistration}>
+          <Form.Group className='mb-3'>
+            <Form.Label className='mr-2 fs-4'>Username:</Form.Label>
+            <Form.Control
+              type="text"
+              name="Username"
+              value={username}
+              onChange={handleUsernameChange}
+            />
+          </Form.Group>
 
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="confirmed"
-                  label="Confirm Password"
-                  type="confirmed"
-                  id="Confirm Password"
-                  autoComplete="confirmed-password"
-                />
-              </Grid>
+          <Form.Group>
+            <Form.Label className='mr-2 fs-4'>Password</Form.Label>
+            <Form.Control
+              type="password"
+              name="Password"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+          </Form.Group>
 
-              <Grid item xs={12}>
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
-  );
+          <Form.Group>
+            <Form.Label className='mr-2 fs-4'>Email</Form.Label>
+            <Form.Control
+              type="email"
+              name="Email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+          </Form.Group>
+          <Button type="submit" className='mt-3 fs-5'>Submit</Button>
+        </Form>
+      </Card.Body>
+    </Card >
+  )
 }
+
+export default Registration

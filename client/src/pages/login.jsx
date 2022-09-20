@@ -1,97 +1,74 @@
-import React, { Component } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from 'react'
+import { useNavigate } from "react-router-dom";
+import loginSerivce from '../services/login'
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Card from 'react-bootstrap/Card';
 
 
-const theme = createTheme();
+const Login = () => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
-export default function LogIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    try {
+      const data = await loginSerivce.login({
+        username, password
+      })
+      if (data === null) {
+        navigate('/login')
+      } else {
+        loginSerivce.setToken(data.token)
+        setPassword('')
+        setUsername('')
+        navigate('/dashboard')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleUsernameChange = (event) => {
+    event.preventDefault()
+    setUsername(event.target.value)
+  }
+
+  const handlePasswordChange = (event) => {
+    event.preventDefault()
+    setPassword(event.target.value)
+  }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
+    <Card style={{ width: '50rem' }} className={'mx-auto'}>
+      <Card.Title className={'p-2 fs-1'}>Login</Card.Title>
+      <Card.Body>
+        <Form onSubmit={handleLogin}>
+          <Form.Group className='mb-3'>
+            <Form.Label className='mr-2 fs-4'>Username:</Form.Label>
+            <Form.Control
+              type="text"
+              value={username}
+              name="Username"
+              onChange={handleUsernameChange}
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label className='mr-2 fs-4'>Password</Form.Label>
+            <Form.Control
               type="password"
-              id="password"
-              autoComplete="current-password"
+              value={password}
+              name="Password"
+              onChange={handlePasswordChange}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Login
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
-  );
+          </Form.Group>
+          <Button type="submit" className='mt-3 fs-5'>Login</Button>
+        </Form>
+      </Card.Body>
+    </Card >
+  )
 }
+export default Login

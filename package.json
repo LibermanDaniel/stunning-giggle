@@ -4,7 +4,7 @@
   "description": "root folder",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"cd client&&export HTTPS=true&&SSL_CRT_FILE=./ssl/cert.crt&&SSL_KEY_FILE=./ssl/key.pem&&npm start\" \"cd server&&npm start\""
+    "start": "concurrently \"cd client&&npm start\" \"cd server&&npm start\""
   },
   "author": "",
   "license": "ISC",

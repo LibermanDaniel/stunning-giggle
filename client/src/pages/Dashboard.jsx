@@ -1,8 +1,4 @@
-import Form from 'react-bootstrap/Form';
 import { useState } from 'react'
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-
 import { Canvas } from "@react-three/fiber"
 import { OrbitControls } from "@react-three/drei"
 import Box from '../components/Box'
@@ -33,7 +29,7 @@ const Dashboard = () => {
   const formBuilder = (parameter) => {
     console.log(parameter)
     return (
-      <Form>
+      <form>
         {parameter.inputFields.map(inputField => {
           switch (inputField) {
             case 'cubeSide':
@@ -58,72 +54,70 @@ const Dashboard = () => {
               return null;
           }
         })}
-        <Button type="submit" className='mt-3 fs-5'>Submit</Button>
-      </Form>
+        <button type="submit" className='mt-3 fs-5'>Submit</button>
+      </form>
     )
   }
   const cubeSide = () => {
     return (
-      <Form.Group className="mb-3">
-        <Form.Label>Cube side:</Form.Label>
-
-        <Form.Select>
+      <form>
+        <select>
           <option value={1} > 1 </option>
           <option value={2} > 2 </option>
           <option value={3} > 3 </option>
           <option value={4} > 4 </option>
           <option value={5} > 5 </option>
           <option value={6} > 6 </option>
-        </Form.Select>
-      </Form.Group >
+        </select>
+      </form>
     )
   }
 
   const tempTarget = () => {
     return (
-      <Form.Group className="mb-3">
-        <Form.Label>Temp target:</Form.Label>
-        <Form.Control type="number" placeholder="25" />
-      </Form.Group>
+      <form className="mb-3">
+        <label>Temp target:</label>
+        <input type="number" placeholder="25" />
+      </form>
     )
   }
 
   const humidTarget = () => {
     return (
-      <Form.Group className="mb-3">
-        <Form.Label>Humid target:</Form.Label>
-        <Form.Control type="number" placeholder="30%" />
-      </Form.Group>
+      <form className="mb-3">
+        <label>Humid target:</label>
+        <input type="number" placeholder="30%" />
+      </form>
     )
   }
 
   const colorPicker = () => {
     return (
-      <Form.Group className="mb-3">
-        <Form.Label>Color:</Form.Label>
-        <Form.Control type="color" defaultValue />
-      </Form.Group>
+      <form className="mb-3">
+        <label>Color:</label>
+        <input type="color" defaultValue />
+      </form>
     )
   }
 
   const notifcation = () => {
     return (
-      <Form.Group className="mb-3">
-        <Form.Check
+      <form className="mb-3">
+        <input
           inline
           type={'checkbox'}
           id={`default-${'checkbox'}`}
           value={'Vibrate'}
           label={'Vibrate'}
         />
-        <Form.Check
+        <input
           inline
           type={'checkbox'}
           id={`default-${'checkbox'}`}
           value={'Lights'}
           label={'Lights'}
         />
-        <Form.Check
+        <input
           inline
           type={'checkbox'}
           id={`default-${'checkbox'}`}
@@ -131,20 +125,20 @@ const Dashboard = () => {
           label={'Both'}
         />
         {value === 'Lights' || value === 'Both' ? colorPicker() : null}
-      </Form.Group>
+      </form>
     )
   }
 
   const weather = () => {
     return (
-      <Form.Group className="mb-3">
-        <Form.Label>Set city:</Form.Label>
-        <Form.Control type="text" value={''} placeholder="City" />
-      </Form.Group>
+      <form className="mb-3">
+        <label>Set city:</label>
+        <input type="text" value={''} placeholder="City" />
+      </form>
     )
   }
   return (
-    <Container>
+    <div>
       <h1>Welcome to the dashboard</h1>
       <Canvas style={{ height: "500px" }}>
         <OrbitControls enableZoom={false} />
@@ -153,14 +147,14 @@ const Dashboard = () => {
         <Box />
       </Canvas>
       <p>Set functionality</p>
-      <Form.Select aria-label="Default select example" onChange={handleClick}>
+      <form aria-label="Default select example" onChange={handleClick}>
         <option id='0' defaultValue hidden>Select function</option>
         {parameters.map(parameter => {
           return <option value={parameter.name}>{parameter.name}</option>
         })}
-      </Form.Select >
+      </form >
       {parameter === null ? null : formBuilder(parameter)}
-    </Container >
+    </div >
   )
 }
 

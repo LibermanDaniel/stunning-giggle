@@ -1,4 +1,5 @@
 import { Routes, Route, Link, Outlet } from "react-router-dom";
+import React, { useState } from 'react';
 import HomePage from './pages/Homepage'
 import Login from './pages/Login'
 import Register from './pages/Register'

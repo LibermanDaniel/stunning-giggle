@@ -49,5 +49,5 @@
     "eslint-plugin-react": "^7.31.4",
     "nodemo": "^1.0.0"
   },
-  "proxy": "https://localhost:3003"
+  "proxy": "http://localhost:3003"
 }

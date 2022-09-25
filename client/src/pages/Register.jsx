@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,19 +10,42 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import registerService from '../services/register'
 
 
 const theme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
+
+  const handleRegistration = async (event) => {
+    event.preventDefault()
+    try {
+      await registerService.register({ username, password, email })
+      setPassword('')
+      setUsername('')
+      setEmail('')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleUsernameChange = (event) => {
+    event.preventDefault()
+    setUsername(event.target.value)
+  }
+
+  const handlePasswordChange = (event) => {
+    event.preventDefault()
+    setPassword(event.target.value)
+  }
+
+  const handleEmailChange = (event) => {
+    event.preventDefault()
+    setEmail(event.target.value)
+  }
 
   console.log('merge me')
 
@@ -32,10 +55,14 @@ export default function SignUp() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            p: 3,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            border: 1,
+            borderColor: 'grey.200',
+            boxShadow: 1,
+            borderRadius: '16px'
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: '#39FF13' }}>
@@ -44,7 +71,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate onSubmit={handleRegistration} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -55,6 +82,7 @@ export default function SignUp() {
                   id="userName"
                   label="Username"
                   autoFocus
+                  onChange={handleUsernameChange}
                 />
               </Grid>
 
@@ -66,6 +94,7 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange={handleEmailChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -77,6 +106,7 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={handlePasswordChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -104,7 +134,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

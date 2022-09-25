@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,19 +13,46 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import loginSerivce from '../services/login'
 
 const theme = createTheme();
 
 export default function LogIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
+
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    try {
+      const data = await loginSerivce.login({
+        username, password
+      })
+      if (data === null) {
+        navigate('/login')
+      } else {
+        loginSerivce.setToken(data.token)
+        setPassword('')
+        setUsername('')
+        navigate('/dashboard')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleUsernameChange = (event) => {
+    event.preventDefault()
+    setUsername(event.target.value)
+  }
+
+  const handlePasswordChange = (event) => {
+    event.preventDefault()
+    setPassword(event.target.value)
+  }
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -32,10 +60,14 @@ export default function LogIn() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            p: 3,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            border: 1,
+            borderColor: 'grey.200',
+            boxShadow: 1,
+            borderRadius: '16px'
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}>
@@ -44,26 +76,26 @@ export default function LogIn() {
           <Typography component="h1" variant="h5">
             Login
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
-              required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
+              onChange={handleUsernameChange}
             />
             <TextField
               margin="normal"
-              required
               fullWidth
               name="password"
               label="Password"
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={handlePasswordChange}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -84,7 +116,7 @@ export default function LogIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

@@ -14,13 +14,14 @@ export const EmailVerificationPage = () => {
   useEffect(() => {
     const loadVerification = async () => {
       try {
-        const { token } = await axios.put('/api/verify-email', { verificationString }).data
+        const res  = await axios.put('/api/verify-email', { verificationString })
+        const {token} = res.data
         setToken(token)
-        setIsSuccess(false)
+        setIsSuccess(true)
         setIsLoading(false)
       } catch (err) {
         setIsSuccess(false)
-        setIsLoading(false)
+        setIsLoading(true)
       }
     }
 

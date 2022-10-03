@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const { v4: uuid } = require('uuid')
 const { logger } = require('../../utils/logger')
 const config = require('../../config/config')
+const { sendEmail } = require('../../utils/email')
 
 const registerationHandler = async (req, res) => {
   const { username, password, email } = req.body
@@ -25,11 +26,25 @@ const registerationHandler = async (req, res) => {
       verificationString
     })
 
-    user.save((err, user) => {
+    user.save(async (err, user) => {
       if (err) {
         logger.error('registerationHandler | Error occurred:', err)
         res.sendStatus(500)
       }
+
+      try {
+        await sendEmail(
+          email,
+          username,
+          'Verification Email',
+          'Verification Email',
+          `Thanks for signing up! To verify your email, click here: <a href=http://localhost:3000/verify-email/${verificationString}>Verify</a>`
+        )
+      } catch (err) {
+        logger.error(err)
+        res.sendStatus(500)
+      }
+
       jwt.sign({
         id: user._id,
         email,

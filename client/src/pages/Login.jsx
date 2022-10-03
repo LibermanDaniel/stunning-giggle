@@ -22,7 +22,7 @@ export const Login = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [token, setToken] = useToken()
+  const [,setToken] = useToken()
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
 

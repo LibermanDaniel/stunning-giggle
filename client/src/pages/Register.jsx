@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import {useNavigate} from 'react-router-dom'
+import {useToken} from '../auth/useToken'
+import axios from 'axios'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,20 +18,26 @@ import registerService from '../services/register'
 
 const theme = createTheme();
 
-export default function SignUp() {
+export const  SignUp = () => {
+  const [, setToken] = useToken()
+  const [errorMessage, setErrorMessage] = useState('')
   const [username, setUsername] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
+
+
+  const navigate = useNavigate()
 
   const handleRegistration = async (event) => {
     event.preventDefault()
     try {
-      await registerService.register({ username, password, email })
-      setPassword('')
-      setUsername('')
-      setEmail('')
+      const {token} = await registerService.register({ username, password, email }).data
+      setToken(token)
+
+      navigate('/please-verify')
     } catch (error) {
-      console.log(error)
+      setErrorMessage(error)
     }
   }
 
@@ -40,6 +49,11 @@ export default function SignUp() {
   const handlePasswordChange = (event) => {
     event.preventDefault()
     setPassword(event.target.value)
+  }
+
+  const handleConfirmPassword = (event) => {
+    event.preventDefault()
+    setConfirmPassword(event.target.value)
   }
 
   const handleEmailChange = (event) => {
@@ -68,6 +82,7 @@ export default function SignUp() {
           <Avatar sx={{ m: 1, bgcolor: '#39FF13' }}>
             <LockOutlinedIcon />
           </Avatar>
+          {errorMessage && <div className='fail'>{errorMessage}</div>}
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
@@ -113,14 +128,14 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  name="confirmed"
+                  name="confirmPassword"
                   label="Confirm Password"
-                  type="confirmed"
-                  id="Confirm Password"
-                  autoComplete="confirmed-password"
+                  type="password"
+                  id="confirmPassword"
+                  autoComplete="new-password"
+                  onChange={handleConfirmPassword}
                 />
               </Grid>
-
               <Grid item xs={12}>
               </Grid>
             </Grid>
@@ -129,6 +144,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={!username || !email || !password || password !== confirmPassword}
             >
               Sign Up
             </Button>

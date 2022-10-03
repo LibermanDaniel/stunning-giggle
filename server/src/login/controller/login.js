@@ -1,28 +1,39 @@
 const User = require('../../models/user')
 const jwt = require('jsonwebtoken')
 const { logger } = require('../../utils/logger')
+const bcrypt = require('bcrypt')
 const config = require('../../config/config')
 
 
 const loginHandler = async (req, res) => {
-  const { username } = req.body
+  const { username, password } = req.body
   try {
     const user = await User.findOne({ username })
     if (!user) {
       logger.info('User does not exist!')
-    } else {
-      const userForToken = {
-        username: user.username,
-        id: user._id
-      }
-      const token = jwt.sign(userForToken, config.jwtSecret, { expiresIn: 60 * 60 })
-      res.cookie('token', token, { httpOnly: true })
-      res.status(200).send({ token, username, msg: 'OK' })
+      return res.status(401)
     }
+
+    const userForToken = {
+      username: user.username,
+      id: user._id,
+      name: user.name,
+      passwordHash: user.passwordHash,
+      isVerified: user.isVerified
+    }
+
+    jwt.sign(userForToken, config.jwtSecret,
+      { expiresIn: '2d' },
+      (err, token) => {
+        if (err) {
+          res.status(500)
+        }
+        res.status(200).json({ token })
+      })
   }
   catch (err) {
     logger.error(err)
-    res.status(400).json({ msg: 'Log in error!' })
+    res.status(401).json({ msg: 'Log in error!' })
   }
 }
 

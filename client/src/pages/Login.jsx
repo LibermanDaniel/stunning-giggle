@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState,  } from 'react';
 import { useNavigate } from "react-router-dom";
+import {useToken} from '../auth/useToken'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,25 +18,27 @@ import loginSerivce from '../services/login'
 
 const theme = createTheme();
 
-export default function LogIn() {
+export const Login = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [token, setToken] = useToken()
+  const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
 
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const data = await loginSerivce.login({
+      const {token} = await loginSerivce.login({
         username, password
-      })
-      if (data === null) {
+      }).data
+      if (token === null) {
         navigate('/login')
+        setErrorMessage('Error occurred while trying to log in!')
+        setTimeout(()=> {setErrorMessage('')}, 5000)
       } else {
-        loginSerivce.setToken(data.token)
-        setPassword('')
-        setUsername('')
+        setToken(token)
         navigate('/dashboard')
       }
     } catch (error) {
@@ -116,7 +119,7 @@ export default function LogIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="register" variant="body2">
+                <Link href="signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

@@ -7,13 +7,15 @@ const config = require('../../config/config')
 
 const loginHandler = async (req, res) => {
   const { username, password } = req.body
-  try {
-    const user = await User.findOne({ username })
-    if (!user) {
-      logger.info('User does not exist!')
-      return res.status(401)
-    }
 
+  const user = await User.findOne({ username })
+  if (!user) {
+    logger.info('User does not exist!')
+    return res.sendStatus(401)
+  }
+  const isValid = await bcrypt.compare(password, user.password)
+
+  if (isValid) {
     const userForToken = {
       username: user.username,
       id: user._id,
@@ -22,18 +24,18 @@ const loginHandler = async (req, res) => {
       isVerified: user.isVerified
     }
 
+
     jwt.sign(userForToken, config.jwtSecret,
       { expiresIn: '2d' },
       (err, token) => {
         if (err) {
-          res.status(500)
+          res.sendStatus(500)
         }
+        console.log(token)
         res.status(200).json({ token })
       })
-  }
-  catch (err) {
-    logger.error(err)
-    res.status(401).json({ msg: 'Log in error!' })
+  } else {
+    res.sendStatus(401)
   }
 }
 

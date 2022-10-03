@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 import {useToken} from '../auth/useToken'
-import axios from 'axios'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import registerService from '../services/register'
+import {register} from '../services/register'
 
 
 const theme = createTheme();
@@ -32,7 +31,7 @@ export const  SignUp = () => {
   const handleRegistration = async (event) => {
     event.preventDefault()
     try {
-      const {token} = await registerService.register({ username, password, email }).data
+      const {token} = await register({ username, password, email })
       setToken(token)
 
       navigate('/please-verify')
@@ -60,8 +59,6 @@ export const  SignUp = () => {
     event.preventDefault()
     setEmail(event.target.value)
   }
-
-  console.log('merge me')
 
   return (
     <ThemeProvider theme={theme}>

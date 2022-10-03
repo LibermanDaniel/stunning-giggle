@@ -8,9 +8,6 @@ const middleware = require('./src/utils/middleware')
 const { logger } = require('./src/utils/logger')
 const config = require('./src/config/config')
 const mongoose = require('mongoose')
-const passport = require('passport')
-const session = require('express-session')
-const passportLocal = require('./src/config/passport')
 const mongoUrl = config.MONGODB_URI
 
 mongoose.connect(mongoUrl, async (err) => {
@@ -20,8 +17,6 @@ mongoose.connect(mongoUrl, async (err) => {
   logger.info('Connected to MongoDB')
 })
 
-
-
 app.use(cors())
 app.use(express.json())
 
@@ -29,16 +24,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(middleware.requestLogger)
 app.use(middleware.errorHandler)
-
-app.use(session({
-  secret: config.sessionSecret,
-  resave: false,
-  saveUninitialized: true,
-}))
-
-passportLocal(passport)
-app.use(passport.initialize())
-app.use(passport.session())
 
 app.use('/api/', loginRouter)
 app.use('/api/', registerRouter)

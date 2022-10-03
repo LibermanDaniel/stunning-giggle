@@ -6,8 +6,8 @@ export const PleaseVerifyPage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigate.push('/')
-    }, 3000)
+      navigate('/')
+    }, 5000)
   }, [navigate])
 
   return (

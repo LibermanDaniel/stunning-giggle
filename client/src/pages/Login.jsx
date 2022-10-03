@@ -32,7 +32,7 @@ export const Login = () => {
     try {
       const {token} = await loginSerivce.login({
         username, password
-      }).data
+      })
       if (token === null) {
         navigate('/login')
         setErrorMessage('Error occurred while trying to log in!')

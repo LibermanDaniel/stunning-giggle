@@ -13,15 +13,18 @@ export const useUser = () => {
     if (!token) {
       return null
     }
+    return getPayLoadFromToken(token)
   })
 
   useEffect(() => {
     if (!token) {
+      console.log("empty user")
       setUser(null)
     } else {
+      console.log("setting user")
       setUser(getPayLoadFromToken(token))
     }
   }, [token])
 
-  return user
+  return [user, token]
 }

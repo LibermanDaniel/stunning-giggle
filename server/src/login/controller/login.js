@@ -31,7 +31,6 @@ const loginHandler = async (req, res) => {
         if (err) {
           res.sendStatus(500)
         }
-        console.log(token)
         res.status(200).json({ token })
       })
   } else {

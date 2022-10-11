@@ -11,10 +11,6 @@ export const ForgotPasswordLanding = () => {
   const [confirmPasswordValue, setConfirmPasswordValue] = useState('')
   const { passwordString } = useParams()
 
-
-  if (isFailure) return <ForgotPasswordFail/>
-  if(isSuccess) return <ForgotPasswordSuccess/>
-
   const onResetClick = async () => {
     try {
       await axios.put(`/api/${passwordString}/reset-password`, {newPassword: passwordValue})
@@ -26,6 +22,9 @@ export const ForgotPasswordLanding = () => {
       setIsSuccess(false)
     }
   }
+
+  if (isFailure) return <ForgotPasswordFail/>
+  if(isSuccess) return <ForgotPasswordSuccess/>
 
   return (
     <div>

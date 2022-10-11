@@ -36,7 +36,7 @@ export const  SignUp = () => {
 
       navigate('/please-verify')
     } catch (error) {
-      setErrorMessage(error)
+      setErrorMessage("Error occurred!")
     }
   }
 

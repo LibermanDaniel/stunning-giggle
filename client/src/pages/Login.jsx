@@ -1,4 +1,4 @@
-import React, { useState,  } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import {useToken} from '../auth/useToken'
 import Avatar from '@mui/material/Avatar';
@@ -22,6 +22,7 @@ export const Login = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
   const [,setToken] = useToken()
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
@@ -36,12 +37,13 @@ export const Login = () => {
       if (token === null) {
         navigate('/login')
         setErrorMessage('Error occurred while trying to log in!')
-        setTimeout(()=> {setErrorMessage('')}, 5000)
       } else {
         setToken(token)
         navigate('/dashboard')
       }
     } catch (error) {
+      setErrorMessage("Invalid username or password!")
+      setTimeout(()=> {setErrorMessage('')}, 3000)
       console.log(error)
     }
   }
@@ -73,6 +75,7 @@ export const Login = () => {
             borderRadius: '16px'
           }}
         >
+          {<p>{errorMessage}</p>}
           <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}>
             <LockOutlinedIcon />
           </Avatar>

@@ -28,6 +28,7 @@ export const EmailVerificationPage = () => {
     loadVerification()
   }, [setToken, verificationString])
 
+  
   if (isLoading) {
     return (<p>Loading...</p>)
   }

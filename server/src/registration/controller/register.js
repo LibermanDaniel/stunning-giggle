@@ -54,7 +54,7 @@ const registerationHandler = async (req, res) => {
         email,
         isVerified: false
       }, config.jwtSecret, {
-        expiresIn: '2d'
+        expiresIn: '1h'
       }, (err, token) => {
         if (err) {
           return res.status(500).json({ message: 'Error occurred!' })

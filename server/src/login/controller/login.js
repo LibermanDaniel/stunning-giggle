@@ -26,7 +26,7 @@ const loginHandler = async (req, res) => {
 
 
     jwt.sign(userForToken, config.jwtSecret,
-      { expiresIn: '2d' },
+      { expiresIn: '1h' },
       (err, token) => {
         if (err) {
           res.status(500).json({ message: 'Error occurred!' })

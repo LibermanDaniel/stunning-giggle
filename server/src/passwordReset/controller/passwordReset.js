@@ -26,7 +26,7 @@ const passwordResetHandler = async (req, res) => {
     }
     catch (err) {
       logger.error(err)
-      res.sendStatus(500)
+      res.status(500).json({ message: 'Couldn\'t reset password!' })
     }
   }
 
@@ -51,7 +51,7 @@ const updatePassword = async (req, res) => {
     })
 
   if (!result) {
-    return res.sendStatus(404)
+    return res.status(404).json({ 'Error occurred whilte setting up the new password!' })
   }
   res.sendStatus(200)
 }

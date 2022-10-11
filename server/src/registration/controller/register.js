@@ -17,7 +17,7 @@ const registerationHandler = async (req, res) => {
 
     const checkUser = await User.findOne({ username })
     if (checkUser) {
-      res.sendStatus(409)
+      res.status(409).json({ message: 'Error occurred!' })
     }
 
     const encryptedPassword = bcrypt.hashSync(extraSalt + password + pepper, salt)
@@ -57,7 +57,7 @@ const registerationHandler = async (req, res) => {
         expiresIn: '2d'
       }, (err, token) => {
         if (err) {
-          return res.sendStatus(500).send(err)
+          return res.status(500).json({ message: 'Error occurred!' })
         }
         res.status(200).json({ token })
       })
@@ -65,7 +65,7 @@ const registerationHandler = async (req, res) => {
   }
   catch (err) {
     logger.error('registerationHandler | Error occurred:', err)
-    res.sendStatus(400).json({ msg: 'Error occurred!' })
+    res.sendStatus(400).json({ message: 'Error occurred!' })
   }
 
 }

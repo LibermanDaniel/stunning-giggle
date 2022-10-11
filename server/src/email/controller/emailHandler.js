@@ -7,7 +7,7 @@ const emailHandler = async (req, res) => {
   const result = await User.findOne({ verificatioString })
 
   if (!result) {
-    res.status(401).json({ msg: 'The email verfication code is incorrect' })
+    res.status(401).json({ message: 'The email verfication code is incorrect' })
   }
 
   const { _id, username, email } = result

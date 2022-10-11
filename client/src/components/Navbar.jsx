@@ -6,10 +6,10 @@ import { useToken } from '../auth/useToken'
 export const Navbar = () => {
   const [username, setUsername] = useState('')
   const [verified, setVerified] = useState(false)
-  const [user, token] = useUser()
+  const user = useUser()
+  let token = localStorage.getItem('token') || ''
 
   useEffect(() => {
-    console.log('moi')
     if (user) {
       setUsername(user.username)
       setVerified(user.isVerified)
@@ -29,6 +29,7 @@ export const Navbar = () => {
     {verified ? <Link to='/' onClick={logOut}>Log out</Link> :<Link to='/login'>Login</Link>}
     <Link to='/signup'>Register</Link>
     <Link to='/dashboard'>Dashboard</Link>  
+    <Outlet />
   </nav>
   )
 }

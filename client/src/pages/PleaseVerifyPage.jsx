@@ -12,7 +12,7 @@ export const PleaseVerifyPage = () => {
 
   return (
     <div>
-      <h1>Thankks for signing up!</h1>
+      <h1>Thanks for signing up!</h1>
       <p>You will receive a verification email shortly to the email you have provided.</p>
       <p>Please verify to utilize the web application's features.</p>
     </div>

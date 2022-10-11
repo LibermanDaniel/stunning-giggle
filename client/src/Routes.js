@@ -6,20 +6,24 @@ import { Login } from './pages/Login'
 import { SignUp } from './pages/Register'
 import { EmailVerificationPage } from './pages/EmailVerificationPage'
 import { PleaseVerifyPage } from './pages/PleaseVerifyPage'
-import { Navbar } from './components/Navbar'
-
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
+import { ForgotPasswordLanding } from './pages/ForgotPasswordLanding'
 
 export const AppRoutes = () => {
   return (
-    <Routes>
-      <Route element={<PrivateRoute />}>
-        <Route element={<Dashboard />} path='/dashboard' exact />
-      </Route>
-      <Route path="/login" element={<Login />} />
-      <Route path="/please-verify" element={<PleaseVerifyPage />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/" element={<Homepage />} />
-      <Route path="/verify-email/:verificationString" element={<EmailVerificationPage />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route element={<PrivateRoute />}>
+          <Route element={<Dashboard />} path='/dashboard' exact />
+        </Route>
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/please-verify" element={<PleaseVerifyPage />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/" element={<Homepage />} />
+        <Route path="/verify-email/:verificationString" element={<EmailVerificationPage />} />
+        <Route path="/reset-password/:passwordString" element={<ForgotPasswordLanding />} />
+      </Routes>
+    </>
   )
 }

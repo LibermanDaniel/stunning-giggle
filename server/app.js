@@ -5,6 +5,7 @@ const cors = require('cors')
 const loginRouter = require('./src/login/routes/login')
 const registerRouter = require('./src/registration/routes/registration')
 const emailRouter = require('./src/email/routes/emailRoutes')
+const passwordResetRouter = require('./src/passwordReset/routes/passwordReset')
 const middleware = require('./src/utils/middleware')
 const { logger } = require('./src/utils/logger')
 const config = require('./src/config/config')
@@ -29,6 +30,7 @@ app.use(middleware.errorHandler)
 app.use('/api/', loginRouter)
 app.use('/api/', registerRouter)
 app.use('/api/', emailRouter)
+app.use('/api/', passwordResetRouter)
 // use token extractor when starting to build the dashboard backend
 
 module.exports = app

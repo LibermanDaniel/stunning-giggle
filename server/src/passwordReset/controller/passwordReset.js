@@ -51,7 +51,7 @@ const updatePassword = async (req, res) => {
     })
 
   if (!result) {
-    return res.status(404).json({ 'Error occurred whilte setting up the new password!' })
+    return res.status(404).json({ message: 'Error occurred whilte setting up the new password!' })
   }
   res.sendStatus(200)
 }

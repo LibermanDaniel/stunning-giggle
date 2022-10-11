@@ -12,16 +12,20 @@ const registerationHandler = async (req, res) => {
     const salt = await bcrypt.genSalt(10)
     const verificationString = uuid()
 
+    const extraSalt = uuid()
+    const pepper = config.pepper
+
     const checkUser = await User.findOne({ username })
     if (checkUser) {
       res.sendStatus(409)
     }
 
-    const encryptedPassword = bcrypt.hashSync(password, salt)
+    const encryptedPassword = bcrypt.hashSync(extraSalt + password + pepper, salt)
     const user = new User({
       username,
       password: encryptedPassword,
       email,
+      extraSalt,
       isVerified: false,
       verificationString
     })

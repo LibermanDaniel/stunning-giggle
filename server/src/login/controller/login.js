@@ -13,7 +13,7 @@ const loginHandler = async (req, res) => {
     logger.info('User does not exist!')
     return res.sendStatus(401)
   }
-  const isValid = await bcrypt.compare(password, user.password)
+  const isValid = await bcrypt.compare(user.extraSalt + password + config.pepper, user.password)
 
   if (isValid) {
     const userForToken = {

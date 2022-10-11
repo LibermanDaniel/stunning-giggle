@@ -2,6 +2,7 @@ const { v4: uuid } = require('uuid')
 const bcrypt = require('bcrypt')
 const logger = require('../../utils/logger')
 const { sendEmail } = require('../../utils/email')
+const config = require('../../config/config')
 const User = require('../../models/user')
 
 const passwordResetHandler = async (req, res) => {
@@ -37,12 +38,15 @@ const updatePassword = async (req, res) => {
   const { newPassword } = req.body
   const salt = await bcrypt.genSalt(10)
 
-  const encryptedPassword = bcrypt.hashSync(newPassword, salt)
+  const extraSalt = uuid()
+  const pepper = config.pepper
+
+  const encryptedPassword = bcrypt.hashSync(extraSalt + newPassword + pepper, salt)
 
   const result = await User.findOneAndUpdate(
     { 'resetPasswordToken': passwordString },
     {
-      $set: { password: encryptedPassword },
+      $set: { password: encryptedPassword, 'extraSalt': extraSalt },
       $unset: { resetPasswordToken: '' }
     })
 

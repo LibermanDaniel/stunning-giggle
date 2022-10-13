@@ -5,15 +5,19 @@ const { v4: uuid } = require('uuid')
 const { logger } = require('../../utils/logger')
 const config = require('../../config/config')
 const { sendEmail } = require('../../utils/email')
+const { passwordValidator, emailValidator } = require('../../utils/validator')
 
 const registerationHandler = async (req, res) => {
   const { username, password, email } = req.body
   try {
     const salt = await bcrypt.genSalt(10)
     const verificationString = uuid()
-
     const extraSalt = uuid()
     const pepper = config.pepper
+
+    if (!passwordValidator(password) || !emailValidator(email)) {
+      res.sendStatus(500)
+    }
 
     const checkUser = await User.findOne({ username })
     if (checkUser) {

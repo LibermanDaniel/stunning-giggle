@@ -4,6 +4,7 @@ const logger = require('../../utils/logger')
 const { sendEmail } = require('../../utils/email')
 const config = require('../../config/config')
 const User = require('../../models/user')
+const { passwordValidator } = require('../../utils/validator')
 
 const passwordResetHandler = async (req, res) => {
   console.log(req.params)
@@ -15,7 +16,6 @@ const passwordResetHandler = async (req, res) => {
   console.log(passwordString)
 
   const user = await User.findOneAndUpdate({ 'email': email }, { resetPasswordToken: passwordString })
-  console.log(user)
   if (user) {
     try {
       await sendEmail(email,
@@ -36,6 +36,9 @@ const passwordResetHandler = async (req, res) => {
 const updatePassword = async (req, res) => {
   const { passwordString } = req.params
   const { newPassword } = req.body
+  if (!passwordValidator(newPassword)) {
+    return res.sendStatus(404)
+  }
   const salt = await bcrypt.genSalt(10)
 
   const extraSalt = uuid()

@@ -1,12 +1,10 @@
+/* eslint-disable no-undef */
 require('dotenv').config()
 
-// eslint-disable-next-line no-undef
 const PORT = process.env.PORT
-
-// eslint-disable-next-line no-undef
 const MONGODB_URI = process.env.MONGODB_URI
+const sessionSecret = process.env.SESSION_SECRET
+const jwtSecret = process.env.JWT_SECRET
+const pepper = process.env.PEPPER_SECRET
 
-const sessionSecret = 'randomStrongPassw0rdInHere'
-const jwtSecret = 'insertStrongPassHere'
-
-module.exports = { MONGODB_URI, PORT, sessionSecret, jwtSecret }
+module.exports = { MONGODB_URI, PORT, sessionSecret, jwtSecret, pepper }

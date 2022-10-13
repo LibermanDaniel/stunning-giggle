@@ -1,9 +1,6 @@
 const http = require('http')
-const fs = require('fs-extra')
 const app = require('./app')
 const { logger } = require('./src/utils/logger')
-
-
 
 const server = http.createServer(app)
 

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import {useToken} from '../auth/useToken'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,28 +18,32 @@ import loginSerivce from '../services/login'
 
 const theme = createTheme();
 
-export default function LogIn() {
+export const Login = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
+  const [,setToken] = useToken()
+  const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
 
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const data = await loginSerivce.login({
+      const {token} = await loginSerivce.login({
         username, password
       })
-      if (data === null) {
+      if (token === null) {
         navigate('/login')
+        setErrorMessage('Error occurred while trying to log in!')
       } else {
-        loginSerivce.setToken(data.token)
-        setPassword('')
-        setUsername('')
+        setToken(token)
         navigate('/dashboard')
       }
     } catch (error) {
+      setErrorMessage("Invalid username or password!")
+      setTimeout(()=> {setErrorMessage('')}, 3000)
       console.log(error)
     }
   }
@@ -70,6 +75,7 @@ export default function LogIn() {
             borderRadius: '16px'
           }}
         >
+          {<p>{errorMessage}</p>}
           <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -111,12 +117,12 @@ export default function LogIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="forgot-password" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="register" variant="body2">
+                <Link href="signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

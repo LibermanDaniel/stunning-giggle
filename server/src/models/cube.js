@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 
 const cubeSchema = mongoose.Schema({
+  id: String,
+  isOn: Boolean,
   config: {
     side_one: { type: Object, required: true },
     side_two: { type: Object, required: true },

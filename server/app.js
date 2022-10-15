@@ -10,6 +10,7 @@ const middleware = require('./src/utils/middleware')
 const { logger } = require('./src/utils/logger')
 const config = require('./src/config/config')
 const mongoose = require('mongoose')
+const { mqttHandler } = require('./src/networks/mqttHandler')
 const mongoUrl = config.MONGODB_URI
 
 mongoose.connect(mongoUrl, async (err) => {
@@ -18,6 +19,8 @@ mongoose.connect(mongoUrl, async (err) => {
   }
   logger.info('Connected to MongoDB')
 })
+
+mqttHandler()
 
 app.use(cors())
 app.use(express.json())

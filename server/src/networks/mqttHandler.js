@@ -13,6 +13,11 @@ const Cube = require('../models/cube')
  *  NETWORK      = "gyro/network"      # Network updates
  *  ERROR        = "gyro/error"        # Errors
  */
+
+/**
+ * Refactoring idea -> in cases where cube is assumed to be existing use findOneAndUpdate within try..catch 
+ * It will result in one less interaction with db
+ */
 const mqttHandler = () => {
   const options = {
     host: '490fecfb40b0499bb757dfeca3e993f1.s1.eu.hivemq.cloud',
@@ -104,13 +109,17 @@ const network = async (message) => {
       // send data to client
       return
     }
-    const randomName = uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] }); // big_red_donkey
+    const randomName = uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] })
 
     const newCube = new Cube({
       cube_id: message.cube_id,
       name: randomName,
       isOn: true,
       currentSide: 1,
+      measurement: {
+        temperature: randomIntFromInterval(10, 30),
+        humidity: randomIntFromInterval(10, 70)
+      },
       config: {
         side_one: {
           funciton: 'idle'
@@ -166,6 +175,10 @@ const topicHandler = {
   network,
   cube,
   error
+}
+
+const randomIntFromInterval = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 module.exports = { mqttHandler }

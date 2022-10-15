@@ -13,6 +13,7 @@ const cubeSchema = mongoose.Schema({
     side_six: { type: Object, required: true },
   },
   currentSide: Number,
+  measurement: { type: Object },
   user: {
     type: mongoose.Schema.Types.ObjectID,
     ref: 'User',

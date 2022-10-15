@@ -1,4 +1,6 @@
 const mqtt = require('mqtt')
+const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
+
 const { logger } = require('../utils/logger')
 const { mqtt_secret } = require('../config/config')
 const Cube = require('../models/cube')
@@ -50,43 +52,96 @@ const subscribe = (client, topic) => {
   logger.info(`Subscribed successfully to topic: ${topic}`)
 }
 
+/**
+ * {
+ *  side_idx: 5,
+ *  cube_id: 45,
+ *  config: { color: '4b2b81' },
+ *  mtype: 2,
+ *  tag: 7,
+ *  timestamp: 1665859038.0797572
+ * }
+ */
+
 const config = (message) => {
-  logger.info("moi config")
+  console.log(message)
+  const sides = {
+    1: 'side_one',
+    2: 'side_two',
+    3: 'side_three',
+    4: 'side_four',
+    5: 'side_five',
+    6: 'side_six'
+  }
+  logger.info('')
 }
 
 const measurement = (message) => {
-  logger.info("moi measurement")
+  logger.info('')
 }
 
-/**
- * EVENT: CUBE EXITED NETWORK
- * SENT: {"cube_id": 186, "mtype": 2, "tag": 2, "timestamp": 1665847026.5578983}
- *
- * EVENT: CUBE JOINED NETWORK
- * SENT: {"cube_id": 215, "mtype": 2, "tag": 1, "timestamp": 1665847171.976537} 
- * */
-const network = (message) => {
-  console.log(message)
+const network = async (message) => {
   if (message.tag === 1) {
-    const cube = Cube.findOne({ id: message.cube_id })
-
+    const cube = await Cube.findOne({ cube_id: message.cube_id })
     if (cube) {
-      Cube.findOneAndUpdate({ id: cube.id }, { $set: { isOn: true } })
+      await Cube.findOneAndUpdate({ cube_id: cube.cube_id }, { $set: { isOn: true } })
       // send data to client
+      return
     }
+    const randomName = uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] }); // big_red_donkey
+
+    const newCube = new Cube({
+      cube_id: message.cube_id,
+      name: randomName,
+      isOn: true,
+      currentSide: 1,
+      config: {
+        side_one: {
+          funciton: 'idle'
+        },
+        side_two: {
+          funciton: 'lamp'
+        },
+        side_three: {
+          funciton: 'weather'
+        },
+        side_four: {
+          funciton: 'temperature'
+        },
+        side_five: {
+          funciton: 'humidity'
+        },
+        side_six: {
+          funciton: 'notifications'
+        }
+      }
+    })
+
+    newCube.save(async (err, savedCube) => {
+      if (err) {
+        logger.error(`MQTT handler | network | Error: ${err}`)
+      }
+      logger.info(`New cube saved: ${savedCube}`)
+    })
 
   }
   else if (message.tag === 2) {
-    logger.info("moimoi")
+    const cube = await Cube.findOne({ cube_id: message.cube_id })
+    if (cube) {
+      await Cube.findOneAndUpdate({ cube_id: cube.cube_id }, { $set: { isOn: false } })
+      logger.info(`Cube ${cube.cube_id} has been turned off`)
+      // send data to client
+      return
+    }
   }
 }
 
 const cube = (message) => {
-  logger.info("moi cube")
+  logger.info('')
 }
 
 const error = (message) => {
-  logger.info("moi error")
+  logger.info('')
 }
 
 const topicHandler = {

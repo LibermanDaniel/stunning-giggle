@@ -63,8 +63,8 @@ const subscribe = (client, topic) => {
  * }
  */
 
-const config = (message) => {
-  console.log(message)
+const config = async (message) => {
+  const functions = ['idle', 'weather', 'notifications', 'lamp', 'temperature', 'humidity']
   const sides = {
     1: 'side_one',
     2: 'side_two',
@@ -73,7 +73,23 @@ const config = (message) => {
     5: 'side_five',
     6: 'side_six'
   }
-  logger.info('')
+  const cubeSide = `config.${sides[message.side_idx]}`
+  const cube = await Cube.findOne({ cube_id: message.cube_id }).clone()
+  if (cube && cube.isOn) {
+    await Cube.updateOne(
+      { cube_id: cube.cube_id },
+      {
+        $set: {
+          [cubeSide]: {
+            function: functions[Math.floor(Math.random() * functions.length)],
+            color: message.config.color
+          }
+        }
+      },
+    )
+    logger.info(`New config applied to cube ${cube.cube_id} (${cube.name}) on side: ${cubeSide}`)
+    return
+  }
 }
 
 const measurement = (message) => {
@@ -82,9 +98,9 @@ const measurement = (message) => {
 
 const network = async (message) => {
   if (message.tag === 1) {
-    const cube = await Cube.findOne({ cube_id: message.cube_id })
+    const cube = await Cube.findOne({ cube_id: message.cube_id }).clone()
     if (cube) {
-      await Cube.findOneAndUpdate({ cube_id: cube.cube_id }, { $set: { isOn: true } })
+      await Cube.updateOne({ cube_id: cube.cube_id }, { $set: { isOn: true } })
       // send data to client
       return
     }

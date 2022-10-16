@@ -146,7 +146,7 @@ const network = async (message) => {
       if (err) {
         logger.error(`MQTT handler | network | Error: ${err}`)
       }
-      logger.info(`New cube saved: ${savedCube}`)
+      logger.info(`New cube saved: cube ${savedCube.cube_id}-${savedCube.name}`)
     })
 
   }
@@ -161,8 +161,30 @@ const network = async (message) => {
   }
 }
 
-const cube = (message) => {
-  logger.info('')
+// Cube flip data
+// {
+//   "cube_id": 250,
+//   "old_side": 6,
+//   "new_side": 6,
+//   "mtype": 2,
+//   "tag": 6,
+//   "timestamp": 1665948731.159994
+// }
+const cube = async (message) => {
+
+  const cube = await Cube.findOne({ cube_id: message.cube_id }).clone()
+  if (cube && cube.isOn) {
+    await Cube.updateOne(
+      { cube_id: cube.cube_id },
+      {
+        $set: {
+          currentSide: message.new_side
+        }
+      },
+    )
+    logger.info(`Cube ${cube.cube_id}-${cube.name} has flipped to side ${message.new_side} from side ${message.old_side}`)
+    return
+  }
 }
 
 const error = (message) => {

@@ -17,6 +17,7 @@ const cubeSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectID,
     ref: 'User',
+    default: null
   }
 }, { timestamps: true })
 

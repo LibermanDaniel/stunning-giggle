@@ -1,9 +1,11 @@
 const mqtt = require('mqtt')
-const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
+const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator')
 
 const { logger } = require('../utils/logger')
+const { cubesTracking } = require('../utils/cubeHelper')
 const { mqtt_secret } = require('../config/config')
 const Cube = require('../models/cube')
+
 
 /**
  *  Pasha's GyroCube simulator's topics
@@ -31,10 +33,10 @@ const mqttHandler = () => {
   const client = mqtt.connect(options)
 
   client.on('connect', () => {
-    logger.info(`MQTT successfully connected with the client ID: ${client.options.clientId}`)
+    // logger.info(`MQTT successfully connected with the client ID: ${client.options.clientId}`)
   })
   client.on('error', (err) => {
-    logger.error(err)
+    // logger.error(err)
   })
 
   topics.forEach((topic) => {
@@ -54,7 +56,7 @@ const mqttHandler = () => {
 
 const subscribe = (client, topic) => {
   client.subscribe(topic)
-  logger.info(`Subscribed successfully to topic: ${topic}`)
+  // logger.info(`Subscribed successfully to topic: ${topic}`)
 }
 
 /**
@@ -92,13 +94,13 @@ const config = async (message) => {
         }
       },
     )
-    logger.info(`New config applied to cube ${cube.cube_id} (${cube.name}) on side: ${cubeSide}`)
+    // logger.info(`New config applied to cube ${cube.cube_id} (${cube.name}) on side: ${cubeSide}`)
     return
   }
 }
 
 const measurement = (message) => {
-  logger.info('')
+  // logger.info('')
 }
 
 const network = async (message) => {
@@ -144,18 +146,17 @@ const network = async (message) => {
 
     newCube.save(async (err, savedCube) => {
       if (err) {
-        logger.error(`MQTT handler | network | Error: ${err}`)
+        // logger.error(`MQTT handler | network | Error: ${err}`)
       }
-      logger.info(`New cube saved: cube ${savedCube.cube_id}-${savedCube.name}`)
+      // logger.info(`New cube saved: cube ${savedCube.cube_id}-${savedCube.name}`)
+      await cubesTracking(savedCube)
     })
-
   }
   else if (message.tag === 2) {
     const cube = await Cube.findOne({ cube_id: message.cube_id })
     if (cube) {
       await Cube.findOneAndUpdate({ cube_id: cube.cube_id }, { $set: { isOn: false } })
-      logger.info(`Cube ${cube.cube_id} has been turned off`)
-      // send data to client
+      // logger.info(`Cube ${cube.cube_id} has been turned off`)
       return
     }
   }
@@ -182,13 +183,13 @@ const cube = async (message) => {
         }
       },
     )
-    logger.info(`Cube ${cube.cube_id}-${cube.name} has flipped to side ${message.new_side} from side ${message.old_side}`)
+    // logger.info(`Cube ${cube.cube_id}-${cube.name} has flipped to side ${message.new_side} from side ${message.old_side}`)
     return
   }
 }
 
 const error = (message) => {
-  logger.info('')
+  // logger.info('')
 }
 
 const topicHandler = {

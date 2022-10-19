@@ -8,6 +8,8 @@ import { EmailVerificationPage } from './pages/EmailVerificationPage'
 import { PleaseVerifyPage } from './pages/PleaseVerifyPage'
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
 import { ForgotPasswordLanding } from './pages/ForgotPasswordLanding'
+import { CubePool } from './pages/CubePool'
+
 
 export const AppRoutes = () => {
   return (
@@ -15,6 +17,7 @@ export const AppRoutes = () => {
       <Routes>
         <Route element={<PrivateRoute />}>
           <Route element={<Dashboard />} path='/dashboard' exact />
+          <Route path="/cube-pool" element={<CubePool />} />
         </Route>
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/login" element={<Login />} />

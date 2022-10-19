@@ -1,14 +1,21 @@
-const { Server } = require("socket.io");
+const { Server } = require('socket.io')
 const { logger } = require('../utils/logger')
 
-const socketInit = (server) => {
-  const io = new Server(server)
+let io
 
-  io.on('connection', (socket) => {
-    console.log('a user connected')
-  })
+module.exports = {
+  init: (server) => {
+    io = new Server(server)
+    io.on('connection', (socket) => {
+      logger.info(`User ${socket.id} has successfully connected`)
+    })
 
+    return io
+  },
+  getIo: () => {
+    if (!io) {
+      logger.error('Can\'t get io instance before calling .init()')
+    }
+    return io
+  }
 }
-
-
-module.exports = { socketInit }

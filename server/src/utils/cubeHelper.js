@@ -1,20 +1,18 @@
-const _ = require('lodash')
 const { logger } = require('./logger')
 const Cube = require('../models/cube')
+const { getIo } = require('../networks/socketHandler')
 
 const cubesTracking = async (newCube) => {
-  const cubes = await Cube.find({})
+  const io = getIo()
 
-  const ownedCubes = cubes.filter(cube => cube.user !== null)
-  if (ownedCubes) {
-    handleOwnedCubes(ownedCubes)
-  }
+  const cubes = await Cube.find({ isOn: { $eq: true }, user: { $ne: null } })
 
+  io.emit('cubePool', cubes)
 
 }
 
 const handleOwnedCubes = (ownedCubes) => {
-  console.log("moi")
+  logger.info("owned cubes")
 }
 
 module.exports = { cubesTracking }

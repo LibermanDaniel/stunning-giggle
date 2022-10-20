@@ -12,12 +12,12 @@ const userSchema = mongoose.Schema({
   isVerified: Boolean,
   settings: {
     type: mongoose.Schema.Types.ObjectID,
-    ref: 'Settings'
+    ref: 'settings'
   },
   cube: [
     {
       type: mongoose.Schema.Types.ObjectID,
-      ref: 'Cube'
+      ref: 'cube'
     }
   ]
 }, { timestamps: true })

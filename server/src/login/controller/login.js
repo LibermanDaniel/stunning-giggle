@@ -20,7 +20,6 @@ const loginHandler = async (req, res) => {
       username: user.username,
       id: user._id,
       name: user.name,
-      passwordHash: user.passwordHash,
       isVerified: user.isVerified
     }
 

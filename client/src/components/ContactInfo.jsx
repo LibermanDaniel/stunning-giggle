@@ -9,22 +9,6 @@ import AlarmIcon from '@mui/icons-material/Alarm';
 import EmailIcon from '@mui/icons-material/Email';
 import IconButton from '@mui/material/IconButton';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-
-      main: '#CFDBC7',
-      contrastText: '#FFFFFF',
-
-    },
-    secondary: {
-
-      main: '#7C9473',
-      contrastText: '#FFFFFF',
-    },
-  },
-})
-
 
 export default function ContactInfo() {
   return (

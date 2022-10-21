@@ -9,6 +9,7 @@ import { PleaseVerifyPage } from './pages/PleaseVerifyPage'
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
 import { ForgotPasswordLanding } from './pages/ForgotPasswordLanding'
 import { CubePool } from './pages/CubePool'
+import { UserPage } from './pages/UserPage'
 
 
 export const AppRoutes = () => {
@@ -19,6 +20,7 @@ export const AppRoutes = () => {
           <Route element={<Dashboard />} path='/dashboard' exact />
           <Route path="/cube-pool" exact element={<CubePool />} />
         </Route>
+        <Route path="/user-page" element={<UserPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/please-verify" element={<PleaseVerifyPage />} />

@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { Canvas } from "@react-three/fiber"
 import { OrbitControls } from "@react-three/drei"
+import { useNavigate } from 'react-router-dom';
+import { useToken } from '../auth/useToken';
+import { useUser } from '../auth/useUser';
+
 import Box from '../components/Box'
 import Button from '@mui/material/Button';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -36,6 +40,8 @@ const Dashboard = () => {
   const [checks, setChecks] = useState([{ name: "Vibrate", checked: false },
   { name: "Lights", checked: false },
   { name: "Both", checked: false }])
+
+
   const parameters = [
     { name: 'Temp', id: 1, inputFields: ['cubeSide', 'targetTemp'] },
     { name: 'Humid', id: 2, inputFields: ['cubeSide', 'targetHumid'] },
@@ -172,6 +178,8 @@ const Dashboard = () => {
       </FormControl>
     )
   }
+
+
   return (
     <div>
           

@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 
 const cubeSchema = mongoose.Schema({
+  cube_id: String,
+  isOn: Boolean,
+  name: String,
   config: {
     side_one: { type: Object, required: true },
     side_two: { type: Object, required: true },
@@ -9,10 +12,12 @@ const cubeSchema = mongoose.Schema({
     side_five: { type: Object, required: true },
     side_six: { type: Object, required: true },
   },
+  currentSide: Number,
+  measurement: { type: Object },
   user: {
     type: mongoose.Schema.Types.ObjectID,
     ref: 'User',
-    unique: true
+    default: null
   }
 }, { timestamps: true })
 

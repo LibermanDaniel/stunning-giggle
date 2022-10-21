@@ -25,6 +25,7 @@ export const Navbar = () => {
   return(
   <nav>
     {username && <p>Hello {user.username}</p>}
+    <Link to='cube-pool'>Cube Pool</Link>
     <Link to='/'>Homepage</Link>
     {verified ? <Link to='/' onClick={logOut}>Log out</Link> :<Link to='/login'>Login</Link>}
     <Link to='/signup'>Register</Link>

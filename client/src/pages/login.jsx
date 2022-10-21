@@ -11,6 +11,8 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { borders } from '@mui/system';
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
@@ -32,10 +34,21 @@ export default function LogIn() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            p: 3 ,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            border: 1,
+            borderRadius: '16px' 
+          }}
+        >
+        <Box
+          sx={{
+            marginTop: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}>
@@ -90,6 +103,7 @@ export default function LogIn() {
               </Grid>
             </Grid>
           </Box>
+        </Box>
         </Box>
       </Container>
     </ThemeProvider>

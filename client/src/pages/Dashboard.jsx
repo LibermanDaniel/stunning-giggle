@@ -2,6 +2,33 @@ import { useState } from 'react'
 import { Canvas } from "@react-three/fiber"
 import { OrbitControls } from "@react-three/drei"
 import Box from '../components/Box'
+import Button from '@mui/material/Button';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Typography from '@mui/material/Typography';
+import Radio from '@mui/material/Radio';
+import InputLabel from '@mui/material/InputLabel';
+import Input from '@mui/material/Input';
+import CssBaseline from '@mui/material/CssBaseline';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+import  StickyFooter from '../components/StickyFooter'
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#CFDBC7',
+      dark: '#7C9473',
+      contrastText: '#fff',
+    },
+
+  },
+});
+
 
 const Dashboard = () => {
   const [parameter, setParameter] = useState(null)
@@ -29,7 +56,7 @@ const Dashboard = () => {
   const formBuilder = (parameter) => {
     console.log(parameter)
     return (
-      <form>
+      <FormControl >
         {parameter.inputFields.map(inputField => {
           switch (inputField) {
             case 'cubeSide':
@@ -54,107 +81,131 @@ const Dashboard = () => {
               return null;
           }
         })}
-        <button type="submit" className='mt-3 fs-5'>Submit</button>
-      </form>
+        <Button variant="primary" type="submit" className='mt-3 fs-5'>Submit</Button>
+      </FormControl>
     )
   }
   const cubeSide = () => {
     return (
-      <form>
-        <select>
-          <option value={1} > 1 </option>
-          <option value={2} > 2 </option>
-          <option value={3} > 3 </option>
-          <option value={4} > 4 </option>
-          <option value={5} > 5 </option>
-          <option value={6} > 6 </option>
-        </select>
-      </form>
+      <ThemeProvider theme={theme}>
+      <FormControl sx={{ m: 3, minWidth: 100 }}>
+        <Box>
+      <InputLabel id='0' defaultValue hidden>Cube side:</InputLabel>
+        <Select>
+          <MenuItem value={1} > 1 </MenuItem>
+          <MenuItem value={2} > 2 </MenuItem>
+          <MenuItem value={3} > 3 </MenuItem>
+          <MenuItem value={4} > 4 </MenuItem>
+          <MenuItem value={5} > 5 </MenuItem>
+          <MenuItem value={6} > 6 </MenuItem>
+        </Select>
+        </Box>
+      </FormControl>
+      
+      </ThemeProvider>
     )
   }
 
   const tempTarget = () => {
     return (
-      <form className="mb-3">
-        <label>Temp target:</label>
+      <FormControl sx={{ m: 3, minWidth: 100 }} >
+        <Typography>Temp target:</Typography>
         <input type="number" placeholder="25" />
-      </form>
+      </FormControl>
     )
   }
 
   const humidTarget = () => {
     return (
-      <form className="mb-3">
-        <label>Humid target:</label>
+      <FormControl sx={{ m: 3, minWidth: 100 }}>
+        <Typography>Humid target:</Typography>
         <input type="number" placeholder="30%" />
-      </form>
+      </FormControl>
     )
   }
 
   const colorPicker = () => {
     return (
-      <form className="mb-3">
-        <label>Color:</label>
+      <FormControl sx={{ m: 3, minWidth: 100 }}>
+        <Typography>Color:</Typography>
         <input type="color" defaultValue />
-      </form>
+      </FormControl>
     )
   }
 
   const notifcation = () => {
     return (
-      <form className="mb-3">
-        <input
+      <FormControl sx={{ m: 3, minWidth: 100 }}>
+      <RadioGroup className="mb-3">
+        <FormControlLabel
           inline
-          type={'checkbox'}
+          tcontrol={<Radio />}
           id={`default-${'checkbox'}`}
           value={'Vibrate'}
           label={'Vibrate'}
         />
-        <input
+        <FormControlLabel
           inline
-          type={'checkbox'}
+          control={<Radio />}
           id={`default-${'checkbox'}`}
           value={'Lights'}
           label={'Lights'}
         />
-        <input
+        <FormControlLabel
           inline
-          type={'checkbox'}
+          control={<Radio />}
           id={`default-${'checkbox'}`}
           value={'Both'}
           label={'Both'}
         />
         {value === 'Lights' || value === 'Both' ? colorPicker() : null}
-      </form>
+      </RadioGroup>
+      </FormControl>
     )
   }
 
   const weather = () => {
     return (
-      <form className="mb-3">
-        <label>Set city:</label>
-        <input type="text" value={''} placeholder="City" />
-      </form>
+      <FormControl sx={{ m: 3, minWidth: 100 }}>
+        <InputLabel>Set city:</InputLabel>
+        <Input type="text" value={''} placeholder="City" />
+      </FormControl>
     )
   }
   return (
     <div>
-      <h1>Welcome to the dashboard</h1>
+          
+
+      <Typography textAlign='center' variant="h1" gutterBottom>WELCOME TO THE DASHBOARD</Typography>
       <Canvas style={{ height: "500px" }}>
         <OrbitControls enableZoom={false} />
         <ambientLight intensity={0.5} />
         <directionalLight position={[-2, 5, 2]} intensity={1} />
         <Box />
       </Canvas>
-      <p>Set functionality</p>
-      <form aria-label="Default select example" onChange={handleClick}>
-        <option id='0' defaultValue hidden>Select function</option>
+      <Typography variant="h6" gutterBottom>Set functionality</Typography>
+      <CssBaseline>
+      <ThemeProvider theme={theme}>
+      <FormControl sx={{ m: 3, minWidth: 100 }}>
+        <InputLabel textAlign='center' id='0' defaultValue hidden>Select function</InputLabel>
+        <Select 
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={''}
+        label="Functionality"
+        onChange={handleClick}
+        >
         {parameters.map(parameter => {
-          return <option value={parameter.name}>{parameter.name}</option>
+          return <MenuItem value={parameter.name}>{parameter.name}</MenuItem>
         })}
-      </form >
+        </Select>
+      </FormControl >
+      </ThemeProvider>
+      </CssBaseline>
       {parameter === null ? null : formBuilder(parameter)}
-    </div >
+      <StickyFooter/>
+    </div>
+    
   )
 }
 

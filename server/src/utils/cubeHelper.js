@@ -5,7 +5,7 @@ const { getIo } = require('../networks/socketHandler')
 const cubesTracking = async (newCube) => {
   const io = getIo()
 
-  const cubes = await Cube.find({ isOn: { $eq: true }, user: { $ne: null } })
+  const cubes = await Cube.find({ isOn: { $eq: true }, user: { $eq: null } })
 
   io.emit('cubePool', cubes)
 

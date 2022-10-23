@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useToken } from '../auth/useToken';
@@ -28,7 +29,7 @@ export const EmailVerificationPage = () => {
     };
 
     loadVerification();
-  });
+  }, []);
 
   if (isLoading) {
     return <p>Loading...</p>;

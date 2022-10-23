@@ -7,20 +7,12 @@ import { AppRoutes } from './Routes';
  */
 
 function App() {
-  useEffect(() => {  
-    return () => {
-      localStorage.clear()
-    }
-  })
-  
   return (
-    
-
     <div>
-      <Navbar/>
+      <Navbar />
       <AppRoutes />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

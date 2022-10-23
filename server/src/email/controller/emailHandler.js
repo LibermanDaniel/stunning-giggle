@@ -3,8 +3,12 @@ const jwt = require('jsonwebtoken')
 const config = require('../../config/config')
 
 const emailHandler = async (req, res) => {
-  const { verificatioString } = req.body
-  const result = await User.findOne({ verificatioString })
+  const { verificationString } = req.body
+
+  if (verificationString === 'undefined') {
+    return res.sendStatus(500)
+  }
+  const result = await User.findOne({ verificationString })
 
   if (!result) {
     res.status(401).json({ message: 'The email verfication code is incorrect' })
@@ -12,7 +16,7 @@ const emailHandler = async (req, res) => {
 
   const { _id, username, email } = result
 
-  await User.updateOne({ username }, { $set: { isVerified: true }, $unset: { verificationString: '' } })
+  await User.updateOne({ username }, { $set: { isVerified: true } })
 
   jwt.sign({ _id, email, isVerified: true },
     config.jwtSecret,
@@ -24,5 +28,6 @@ const emailHandler = async (req, res) => {
       res.status(200).json({ token })
     })
 }
+
 
 module.exports = { emailHandler }

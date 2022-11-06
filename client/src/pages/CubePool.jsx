@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../auth/authContext';
+
 import io from 'socket.io-client';
 import axios from 'axios';
 import { useToken } from '../auth/useToken';
-import { useUser } from '../auth/useUser';
 import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -13,7 +14,7 @@ import Typography from '@mui/material/Typography';
 const socket = io();
 
 export const CubePool = () => {
-  const user = useUser();
+  const { user } = useContext(AuthContext);
   const [token, setToken] = useToken();
   const [, setIsConnected] = useState(socket.connected);
   const [availableCubes, setAvailableCubes] = useState([]);
@@ -37,25 +38,25 @@ export const CubePool = () => {
     })();
   }, [token]);
 
-  useEffect(() => {
-    socket.on('connect', () => {
-      setIsConnected(true);
-    });
+  // useEffect(() => {
+  //   socket.on('connect', () => {
+  //     setIsConnected(true);
+  //   });
 
-    socket.on('disconnect', () => {
-      setIsConnected(false);
-    });
+  //   socket.on('disconnect', () => {
+  //     setIsConnected(false);
+  //   });
 
-    socket.on('cubePool', (data) => {
-      setAvailableCubes(data);
-    });
+  //   socket.on('cubePool', (data) => {
+  //     setAvailableCubes(data);
+  //   });
 
-    return () => {
-      socket.off('connect');
-      socket.off('disconnect');
-      socket.off('cubePool');
-    };
-  }, [availableCubes]);
+  //   return () => {
+  //     socket.off('connect');
+  //     socket.off('disconnect');
+  //     socket.off('cubePool');
+  //   };
+  // }, [availableCubes]);
 
   const onClickOwnCube = async (cube) => {
     const response = await axios.put(

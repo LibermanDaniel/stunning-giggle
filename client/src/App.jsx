@@ -1,17 +1,14 @@
-import { useEffect } from 'react';
 import { Navbar } from './components/Navbar';
+import StickyFooter from './components/StickyFooter';
 import { AppRoutes } from './Routes';
-
-/**
- * Add context API in here
- */
 
 function App() {
   return (
-    <div>
+    <>
       <Navbar />
       <AppRoutes />
-    </div>
+      <StickyFooter />
+    </>
   );
 }
 

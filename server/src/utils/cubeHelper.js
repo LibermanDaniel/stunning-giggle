@@ -7,7 +7,7 @@ const cubesTracking = async (newCube) => {
 
   const cubes = await Cube.find({ isOn: { $eq: true }, user: { $eq: null } })
 
-  io.emit('cubePool', cubes)
+  // io.emit('cubePool', cubes)
 
 }
 

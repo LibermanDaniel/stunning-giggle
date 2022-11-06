@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useToken } from './useToken'
 
 export const useUser = () => {
-  const [token] = useToken()
+  const [token, setToken] = useToken()
 
   const getPayLoadFromToken = token => {
     const encodedPayLoad = token.split('.')[1]
@@ -20,7 +20,13 @@ export const useUser = () => {
     if (!token) {
       setUser(null)
     } else {
-      setUser(getPayLoadFromToken(token))
+      const decodedJwt = getPayLoadFromToken(token)
+      if (decodedJwt.exp * 1000 < Date.now()) {
+        localStorage.removeItem('token');
+        setUser(null)
+      } else {
+        setUser(decodedJwt)
+      }
     }
   }, [token])
 

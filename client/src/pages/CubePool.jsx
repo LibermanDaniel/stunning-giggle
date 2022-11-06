@@ -6,7 +6,6 @@ import axios from 'axios';
 import { useToken } from '../auth/useToken';
 import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -38,25 +37,25 @@ export const CubePool = () => {
     })();
   }, [token]);
 
-  // useEffect(() => {
-  //   socket.on('connect', () => {
-  //     setIsConnected(true);
-  //   });
+  useEffect(() => {
+    socket.on('connect', () => {
+      setIsConnected(true);
+    });
 
-  //   socket.on('disconnect', () => {
-  //     setIsConnected(false);
-  //   });
+    socket.on('disconnect', () => {
+      setIsConnected(false);
+    });
 
-  //   socket.on('cubePool', (data) => {
-  //     setAvailableCubes(data);
-  //   });
+    socket.on('cubePool', (data) => {
+      setAvailableCubes(data);
+    });
 
-  //   return () => {
-  //     socket.off('connect');
-  //     socket.off('disconnect');
-  //     socket.off('cubePool');
-  //   };
-  // }, [availableCubes]);
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.off('cubePool');
+    };
+  }, [availableCubes]);
 
   const onClickOwnCube = async (cube) => {
     const response = await axios.put(

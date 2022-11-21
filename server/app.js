@@ -8,10 +8,13 @@ const emailRouter = require('./src/email/routes/emailRoutes')
 const cubePoolRouter = require('./src/cubePool/routes/cubePool')
 const passwordResetRouter = require('./src/passwordReset/routes/passwordReset')
 const middleware = require('./src/utils/middleware')
+const dashboardRouter = require('./src/dashboard/routes/dashboard')
+
 const { logger } = require('./src/utils/logger')
 const config = require('./src/config/config')
 const mongoose = require('mongoose')
 const { mqttHandler } = require('./src/networks/mqttHandler')
+
 const mongoUrl = config.MONGODB_URI
 
 mongoose.connect(mongoUrl, async (err) => {
@@ -36,8 +39,7 @@ app.use('/api/', registerRouter)
 app.use('/api/', emailRouter)
 app.use('/api/', passwordResetRouter)
 app.use('/api/', cubePoolRouter)
-
-// use token extractor when starting to build the dashboard backend
+app.use('/api/', dashboardRouter)
 
 module.exports = app
 

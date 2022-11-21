@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../auth/authContext';
+import { v4 as uuid } from 'uuid';
 
 import io from 'socket.io-client';
 import axios from 'axios';
@@ -9,11 +10,12 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { useUser } from '../auth/useUser';
 
 const socket = io();
 
 export const CubePool = () => {
-  const { user } = useContext(AuthContext);
+  const user = useUser();
   const [token, setToken] = useToken();
   const [, setIsConnected] = useState(socket.connected);
   const [availableCubes, setAvailableCubes] = useState([]);
@@ -63,6 +65,7 @@ export const CubePool = () => {
       { cube },
       { headers: { Authorization: `Bearer ${token}` } }
     );
+    console.log(response);
     setToken(response.data.token);
     setAvailableCubes(response.data.cubes);
   };
@@ -80,8 +83,9 @@ export const CubePool = () => {
       {availableCubes
         ? availableCubes.map((cube) => (
             <Card
-              sx={{ maxWidth: 500, maxHeight: 550 }}
+              sx={{ maxWidth: 500, maxHeight: 650 }}
               style={{ flex: 1, flexDirection: 'column', flexWrap: 'wrap' }}
+              key={uuid()}
             >
               <CardContent
                 style={{
@@ -106,11 +110,11 @@ export const CubePool = () => {
                 <ul>
                   <li>Current Side: {cube.currentSide}</li>
                   {Object.entries(cube.config).map(([key, value]) => (
-                    <li key={key}>
+                    <li key={uuid()}>
                       {key}{' '}
                       <ol>
                         {Object.entries(value).map(([key, value]) => (
-                          <li key={key}>
+                          <li key={uuid()}>
                             {' '}
                             {key}: {value}{' '}
                           </li>

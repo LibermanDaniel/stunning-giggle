@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { PrivateRoute } from './auth/PrivateRoute'
 import Dashboard from './pages/Dashboard'
 import Homepage from './pages/Homepage'
@@ -10,11 +10,13 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
 import { ForgotPasswordLanding } from './pages/ForgotPasswordLanding'
 import { CubePool } from './pages/CubePool'
 import { UserPage } from './pages/UserPage'
-
+import { MissingRoute } from '../src/components/MissingRoute'
 
 export const AppRoutes = () => {
+
   return (
     <>
+
       <Routes>
         <Route element={<PrivateRoute />}>
           <Route element={<Dashboard />} path='/dashboard' exact />
@@ -28,7 +30,9 @@ export const AppRoutes = () => {
         <Route path="/" element={<Homepage />} />
         <Route path="/verify-email/:verificationString" element={<EmailVerificationPage />} />
         <Route path="/reset-password/:passwordString" element={<ForgotPasswordLanding />} />
+        <Route path="*" element={<MissingRoute />} />
       </Routes>
+
     </>
   )
 }

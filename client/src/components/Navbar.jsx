@@ -1,6 +1,10 @@
 import { useUser } from '../auth/useUser';
 import { Link, Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
+
+
 import { useToken } from '../auth/useToken';
 
 export const Navbar = () => {
@@ -22,6 +26,12 @@ export const Navbar = () => {
     setVerified(false);
   };
   return (
+    <Box
+    sx={{
+
+      backgroundColor:"#7C9473"
+    }}
+  >
     <nav>
       {username && <p>Hello {user.username}</p>}
       <Link to='cube-pool'>Cube Pool</Link>
@@ -38,5 +48,7 @@ export const Navbar = () => {
       <Link to='/dashboard'>Dashboard</Link>
       <Outlet />
     </nav>
+    </Box>
+  
   );
 };

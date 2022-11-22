@@ -37,5 +37,29 @@ const dashboardHandler = async (req, res) => {
   }
 }
 
+const applyChanges = async (req, res) => {
+  const { authorization } = req.headers
+  const { userId } = req.body
+
+  if (!authorization) {
+    res.sendStatus(401)
+  }
+  const token = authorization.split(' ')[1]
+
+  jwt.verify(token, config.jwtSecret, async (err, decodedjwt) => {
+    if (err) {
+      res.sendStatus(401)
+    }
+    if (!decodedjwt) {
+      res.sendStatus(500)
+    }
+    const { isVerified } = decodedjwt
+
+    if (!isVerified) {
+      res.sendStatus(401)
+    }
+  })
+}
+
 
 module.exports = { dashboardHandler }

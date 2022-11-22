@@ -36,6 +36,7 @@ const Dashboard = () => {
   const [parameter, setParameter] = useState('');
   const [cubes, setCubes] = useState([]);
   const [cube, setCube] = useState({});
+  const [formDetails, setFormDetails] = useState({});
   const [value, setValue] = useState(null);
   const [token] = useToken();
   const { user } = useContext(AuthContext);
@@ -60,8 +61,21 @@ const Dashboard = () => {
     })();
   }, [token, user]);
 
+  const sendForm = () => {
+    console.log('hello');
+  };
+
   const handleCubeSelect = (event) => {
     event.preventDefault();
+    const [selectedCube] = cubes.filter(
+      (cubeForm) => cubeForm.name === event.target.value
+    );
+    setFormDetails({
+      cube_id: selectedCube.cube_id,
+      id: selectedCube.id,
+      user: selectedCube.user,
+    });
+    console.log(`Form detail: \n${JSON.stringify(formDetails, null, 2)}`);
     setCube(event.target.value);
   };
 
@@ -74,33 +88,76 @@ const Dashboard = () => {
     console.log('parameter', parameter);
   };
 
+  const handleOnChange = (event) => {
+    event.preventDefault();
+    console.log(event.target.value);
+  };
+
   const formBuilder = (parameter) => {
     return (
       <FormControl key={uuid()}>
         {parameter.inputFields.map((inputField) => {
-          console.log(inputField);
           switch (inputField) {
             case 'targetTemp':
-              return <TempTarget key={uuid()} />;
+              return (
+                <TempTarget
+                  key={uuid()}
+                  onClick={() => {
+                    handleOnChange(this);
+                  }}
+                />
+              );
 
             case 'targetHumid':
-              return <HumidTarget key={uuid()} />;
+              return (
+                <HumidTarget
+                  key={uuid()}
+                  onClick={() => {
+                    handleOnChange(this);
+                  }}
+                />
+              );
 
             case 'lamp':
-              return <ColorPicker key={uuid()} />;
+              return (
+                <ColorPicker
+                  key={uuid()}
+                  onClick={() => {
+                    handleOnChange(this);
+                  }}
+                />
+              );
 
             case 'weather':
-              return <WeatherChecker key={uuid()} />;
+              return (
+                <WeatherChecker
+                  key={uuid()}
+                  onClick={() => {
+                    handleOnChange(this);
+                  }}
+                />
+              );
 
             case 'cubeSide':
-              console.log('moi');
-              return <CubeSide key={uuid()} />;
+              return (
+                <CubeSide
+                  key={uuid()}
+                  onClick={() => {
+                    handleOnChange(this);
+                  }}
+                />
+              );
 
             default:
               return null;
           }
         })}
-        <Button variant='primary' type='submit' className='mt-3 fs-5'>
+        <Button
+          onClick={sendForm}
+          variant='primary'
+          type='submit'
+          className='mt-3 fs-5'
+        >
           Submit
         </Button>
       </FormControl>

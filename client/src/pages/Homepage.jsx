@@ -36,7 +36,7 @@ export default function Homepage() {
     >
       <ThemeProvider theme={theme}>
         <CssBaseline>
-          <Welcome />
+          {/* <Welcome /> */}
           <AboutUs />
           <Releases />
           <ContactInfo />

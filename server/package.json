@@ -1,5 +1,5 @@
 {
-  "name": "Server - innovation project",
+  "name": "innovation-server",
   "version": "1.0.0",
   "description": "Backend for the innovation project",
   "main": "server.js",

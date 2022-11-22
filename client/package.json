@@ -49,7 +49,7 @@
   "devDependencies": {
     "eslint-plugin-react": "^7.31.4",
     "nodemo": "^1.0.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "^5.0.1"
   },
   "proxy": "http://localhost:3003"
 }

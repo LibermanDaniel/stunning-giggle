@@ -27,6 +27,7 @@ const theme = createTheme({
 export const UserPage = () => {
   return (
     <ThemeProvider theme={theme}>
+       <Container maxWidth="sm">
       <Box
         sx={{
           display: 'flex',
@@ -74,6 +75,7 @@ export const UserPage = () => {
           </CssBaseline>
         </Box>
       </Box>
+      </Container>
     </ThemeProvider>
   );
 };

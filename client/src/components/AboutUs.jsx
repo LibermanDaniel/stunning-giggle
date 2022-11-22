@@ -14,7 +14,7 @@ const AboutUs = () => {
 
 
 
-    <Container>
+    <Container >
         <Grid container spacing={2}>
             <Grid item xs={6}>
                 <Typography variant="h2" color="white">

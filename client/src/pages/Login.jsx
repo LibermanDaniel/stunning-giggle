@@ -61,8 +61,15 @@ export const Login = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+              <CssBaseline />
+        <Box
+    sx={{
+
+      backgroundColor:"#7C9473"
+    }}
+  >
+      <Container component="main" maxWidth="xs" >
+
         <Box
           sx={{
             p: 3,
@@ -72,11 +79,12 @@ export const Login = () => {
             border: 1,
             borderColor: 'grey.200',
             boxShadow: 1,
-            borderRadius: '16px'
+            borderRadius: '16px',
+            backgroundColor:"#FFFFFF"
           }}
         >
           {<p>{errorMessage}</p>}
-          <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: '#7C9473' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -129,7 +137,9 @@ export const Login = () => {
             </Grid>
           </Box>
         </Box>
+        
       </Container>
+      </Box>
     </ThemeProvider>
   );
 }

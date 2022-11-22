@@ -25,7 +25,8 @@ export default function StickyFooter() {
         sx={{
           py: 3,
           px: 2,
-          mt: 'auto',
+          mb: 0,
+          minHeight: '15vh',
           backgroundColor: "#CFDBC7"
                 }}
       >

@@ -9,6 +9,7 @@ const { passwordValidator, emailValidator } = require('../../utils/validator')
 
 const registerationHandler = async (req, res) => {
   const { username, password, email } = req.body
+  console.log('req body',req.body)
   try {
     const salt = await bcrypt.genSalt(10)
     const verificationString = uuid()

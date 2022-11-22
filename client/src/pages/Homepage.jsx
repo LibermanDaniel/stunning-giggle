@@ -14,7 +14,7 @@ import  Welcome from '../components/Welcome'
 import  AboutUs from '../components/AboutUs'
 import  Releases from '../components/Releases'
 import  ContactInfo from '../components/ContactInfo'
-import  StickyFooter from '../components/StickyFooter'
+
 
 const theme = createTheme({
   palette: {
@@ -32,23 +32,21 @@ export default function Homepage() {
   return (
     <Box
     sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '100vh',
+
       backgroundColor:"#7C9473"
     }}
   >
     <ThemeProvider theme={theme}>
-      
-    < CssBaseline>
 
+    < CssBaseline>
+    <Container >
         <Welcome/>
         <AboutUs/>
         <Releases/>
         <ContactInfo/>
-        <StickyFooter/>
-
+        </Container>
       </CssBaseline>
+
     </ThemeProvider>
     </Box>
 

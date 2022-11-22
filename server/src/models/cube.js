@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const cubeSchema = mongoose.Schema({
-  cube_id: String,
+  cube_id: { type: String, unique: true },
   isOn: Boolean,
   name: String,
   config: {

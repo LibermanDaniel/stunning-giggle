@@ -1,5 +1,6 @@
 const SibApiV3Sdk = require('sib-api-v3-sdk')
-SibApiV3Sdk.ApiClient.instance.authentications['api-key'].apiKey = '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'
+const { sendinblue_key } = require('../config/config')
+SibApiV3Sdk.ApiClient.instance.authentications['api-key'].apiKey = sendinblue_key
 
 const sendEmail = async (toEmail, toName, subject, title, body) => {
   console.log({ toEmail, toName, subject, title, body })

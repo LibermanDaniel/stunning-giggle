@@ -1,170 +1,237 @@
-import { useState } from 'react'
-import { Canvas } from "@react-three/fiber"
-import { OrbitControls } from "@react-three/drei"
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../auth/authContext';
+import { v4 as uuid } from 'uuid';
+import axios from 'axios';
+import lodash from 'lodash';
+
 import { useNavigate } from 'react-router-dom';
 import { useToken } from '../auth/useToken';
-import { useUser } from '../auth/useUser';
 
-import Box from '../components/Box'
+import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+import { ColorPicker } from '../components/formComponents/ColorPicker';
+import { WeatherChecker } from '../components/formComponents/WeatherChecker';
+import { TempTarget } from '../components/formComponents/TempTarget';
+import { HumidTarget } from '../components/formComponents/HumidTarget';
+import { CubeSide } from '../components/formComponents/CubeSide';
+import parameters from './resources/parameters.json';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#CFDBC7',
+      dark: '#7C9473',
+      contrastText: '#fff',
+    },
+  },
+});
 
 const Dashboard = () => {
-  const [parameter, setParameter] = useState(null)
-  const [value, setValue] = useState(null)
-  const [checks, setChecks] = useState([{ name: "Vibrate", checked: false },
-  { name: "Lights", checked: false },
-  { name: "Both", checked: false }])
+  const [parameter, setParameter] = useState('');
+  const [cubes, setCubes] = useState([]);
+  const [cube, setCube] = useState({});
+  const [formDetails, setFormDetails] = useState({});
+  const [value, setValue] = useState(null);
+  const [token] = useToken();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
+  if (!user) {
+    navigate('/');
+  }
 
-  const parameters = [
-    { name: 'Temp', id: 1, inputFields: ['cubeSide', 'targetTemp'] },
-    { name: 'Humid', id: 2, inputFields: ['cubeSide', 'targetHumid'] },
-    { name: 'Weather', id: 3, inputFields: ['cubeSide', 'weather'] },
-    { name: 'Notification', id: 4, inputFields: ['cubeSide', 'notifcation'] },
-    { name: 'Lamp', id: 5, inputFields: ['cubeSide', 'lamp'] },
-    { name: 'Idle', id: 6, inputFields: ['cubeSide'] }
-  ]
+  useEffect(() => {
+    (async () => {
+      if (user) {
+        const { data } = await axios.post(
+          '/api/owned-cubes',
+          { userId: user.id },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setCubes(data);
+      }
+    })();
+  }, [token, user]);
+
+  const sendForm = () => {
+    console.log('hello');
+  };
+
+  const handleCubeSelect = (event) => {
+    event.preventDefault();
+    const [selectedCube] = cubes.filter(
+      (cubeForm) => cubeForm.name === event.target.value
+    );
+    setFormDetails({
+      cube_id: selectedCube.cube_id,
+      id: selectedCube.id,
+      user: selectedCube.user,
+    });
+    console.log(`Form detail: \n${JSON.stringify(formDetails, null, 2)}`);
+    setCube(event.target.value);
+  };
 
   const handleClick = (event) => {
     event.preventDefault();
-    const [selected] = parameters.filter(parameter => {
-      return parameter.name === event.target.value
-    })
-    setParameter(selected)
-  }
+    const [selected] = parameters.filter((parameter) => {
+      return parameter.name === event.target.value;
+    });
+    setParameter(selected);
+    console.log('parameter', parameter);
+  };
+
+  const handleOnChange = (event) => {
+    event.preventDefault();
+    console.log(event.target.value);
+  };
 
   const formBuilder = (parameter) => {
-    console.log(parameter)
     return (
-      <form>
-        {parameter.inputFields.map(inputField => {
+      <FormControl key={uuid()}>
+        {parameter.inputFields.map((inputField) => {
           switch (inputField) {
-            case 'cubeSide':
-              return cubeSide()
-
             case 'targetTemp':
-              return tempTarget()
+              return (
+                <TempTarget
+                  key={uuid()}
+                  onClick={() => {
+                    handleOnChange(this);
+                  }}
+                />
+              );
 
             case 'targetHumid':
-              return humidTarget()
+              return (
+                <HumidTarget
+                  key={uuid()}
+                  onClick={() => {
+                    handleOnChange(this);
+                  }}
+                />
+              );
 
             case 'lamp':
-              return colorPicker()
-
-            case 'notifcation':
-              return notifcation()
+              return (
+                <ColorPicker
+                  key={uuid()}
+                  onClick={() => {
+                    handleOnChange(this);
+                  }}
+                />
+              );
 
             case 'weather':
-              return weather()
+              return (
+                <WeatherChecker
+                  key={uuid()}
+                  onClick={() => {
+                    handleOnChange(this);
+                  }}
+                />
+              );
+
+            case 'cubeSide':
+              return (
+                <CubeSide
+                  key={uuid()}
+                  onClick={() => {
+                    handleOnChange(this);
+                  }}
+                />
+              );
 
             default:
               return null;
           }
         })}
-        <button type="submit" className='mt-3 fs-5'>Submit</button>
-      </form>
-    )
-  }
-  const cubeSide = () => {
-    return (
-      <form>
-        <select>
-          <option value={1} > 1 </option>
-          <option value={2} > 2 </option>
-          <option value={3} > 3 </option>
-          <option value={4} > 4 </option>
-          <option value={5} > 5 </option>
-          <option value={6} > 6 </option>
-        </select>
-      </form>
-    )
-  }
-
-  const tempTarget = () => {
-    return (
-      <form className="mb-3">
-        <label>Temp target:</label>
-        <input type="number" placeholder="25" />
-      </form>
-    )
-  }
-
-  const humidTarget = () => {
-    return (
-      <form className="mb-3">
-        <label>Humid target:</label>
-        <input type="number" placeholder="30%" />
-      </form>
-    )
-  }
-
-  const colorPicker = () => {
-    return (
-      <form className="mb-3">
-        <label>Color:</label>
-        <input type="color" defaultValue />
-      </form>
-    )
-  }
-
-  const notifcation = () => {
-    return (
-      <form className="mb-3">
-        <input
-          inline
-          type={'checkbox'}
-          id={`default-${'checkbox'}`}
-          value={'Vibrate'}
-          label={'Vibrate'}
-        />
-        <input
-          inline
-          type={'checkbox'}
-          id={`default-${'checkbox'}`}
-          value={'Lights'}
-          label={'Lights'}
-        />
-        <input
-          inline
-          type={'checkbox'}
-          id={`default-${'checkbox'}`}
-          value={'Both'}
-          label={'Both'}
-        />
-        {value === 'Lights' || value === 'Both' ? colorPicker() : null}
-      </form>
-    )
-  }
-
-  const weather = () => {
-    return (
-      <form className="mb-3">
-        <label>Set city:</label>
-        <input type="text" value={''} placeholder="City" />
-      </form>
-    )
-  }
-
+        <Button
+          onClick={sendForm}
+          variant='primary'
+          type='submit'
+          className='mt-3 fs-5'
+        >
+          Submit
+        </Button>
+      </FormControl>
+    );
+  };
 
   return (
-    <div>
-      <h1>Welcome to the dashboard</h1>
-      <Canvas style={{ height: "500px" }}>
-        <OrbitControls enableZoom={false} />
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[-2, 5, 2]} intensity={1} />
-        <Box />
-      </Canvas>
-      <p>Set functionality</p>
-      <form aria-label="Default select example" onChange={handleClick}>
-        <option id='0' defaultValue hidden>Select function</option>
-        {parameters.map(parameter => {
-          return <option value={parameter.name}>{parameter.name}</option>
-        })}
-      </form >
-      {parameter === null ? null : formBuilder(parameter)}
-    </div >
-  )
-}
+    <>
+      <Typography variant='h1' gutterBottom>
+        WELCOME TO THE DASHBOARD
+      </Typography>
 
+      <Typography variant='h6' gutterBottom>
+        Select Cube
+      </Typography>
+      <ThemeProvider theme={theme}>
+        <FormControl sx={{ m: 3, minWidth: 150 }}>
+          <InputLabel id='0' defaultValue hidden>
+            Select Cube
+          </InputLabel>
+          <Select
+            labelId='demo-simple-select-label'
+            id='demo-simple-select'
+            label='Select Cube'
+            autoWidth
+            value={cube || ''}
+            onChange={handleCubeSelect}
+          >
+            {cubes &&
+              cubes.map((cubeData) => {
+                return (
+                  <MenuItem value={cubeData.name} key={uuid()}>
+                    {cubeData.name}
+                  </MenuItem>
+                );
+              })}
+          </Select>
+        </FormControl>
+      </ThemeProvider>
+      {console.log(cube)}
+      {lodash.isEmpty(cube) ? null : (
+        <>
+          <Typography variant='h6' gutterBottom>
+            Select Function
+          </Typography>
+          <ThemeProvider theme={theme}>
+            <FormControl sx={{ m: 3, minWidth: 150 }}>
+              <InputLabel id='0' defaultValue hidden>
+                Select Function
+              </InputLabel>
 
-export default Dashboard
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                label='Select Function'
+                autoWidth
+                value={parameter?.name || ''}
+                onChange={handleClick}
+              >
+                {parameters.map((parameter) => {
+                  return (
+                    <MenuItem value={parameter.name} key={uuid()}>
+                      {parameter.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </ThemeProvider>
+          {parameter === '' ? null : formBuilder(parameter)}
+        </>
+      )}
+    </>
+  );
+};
+
+export default Dashboard;

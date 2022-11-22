@@ -148,7 +148,7 @@ const network = async (message) => {
 
     newCube.save(async (err, savedCube) => {
       if (err) {
-        // logger.error(`MQTT handler | network | Error: ${err}`)
+        logger.error(`MQTT handler | network | Error: ${err}`)
       }
       // logger.info(`New cube saved: cube ${savedCube.cube_id}-${savedCube.name}`)
       await cubesTracking(savedCube)
@@ -158,7 +158,7 @@ const network = async (message) => {
     const cube = await Cube.findOne({ cube_id: message.cube_id })
     if (cube) {
       await Cube.findOneAndUpdate({ cube_id: cube.cube_id }, { $set: { isOn: false } })
-      // logger.info(`Cube ${cube.cube_id} has been turned off`)
+      logger.info(`Cube ${cube.cube_id} has been turned off`)
       return
     }
   }

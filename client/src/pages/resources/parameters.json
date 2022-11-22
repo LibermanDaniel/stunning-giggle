@@ -1,0 +1,7 @@
+[
+  { "name": "Temp", "id": 1, "inputFields": ["cubeSide", "targetTemp"] },
+  { "name": "Humid", "id": 2, "inputFields": ["cubeSide", "targetHumid"] },
+  { "name": "Weather", "id": 3, "inputFields": ["cubeSide", "weather"] },
+  { "name": "Lamp", "id": 5, "inputFields": ["cubeSide", "lamp"] },
+  { "name": "Idle", "id": 6, "inputFields": ["cubeSide"] }
+]

@@ -1,36 +1,44 @@
-import {useUser} from '../auth/useUser'
-import {Link, Outlet} from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import { useToken } from '../auth/useToken'
+import { Link, Outlet } from 'react-router-dom';
+import { useContext } from 'react';
+import { useAuthContext } from '../auth/useAuthContext';
+import { AuthContext } from '../auth/authContext';
 
 export const Navbar = () => {
-  const [username, setUsername] = useState('')
-  const [verified, setVerified] = useState(false)
-  const user = useUser()
-  let token = localStorage.getItem('token') || ''
-
-  useEffect(() => {
-    if (user) {
-      setUsername(user.username)
-      setVerified(user.isVerified)
-    }
-  },[user])
-
+  const { dispatch } = useAuthContext();
+  const { user } = useContext(AuthContext);
 
   const logOut = () => {
     localStorage.removeItem('token');
-    setUsername('')
-    setVerified(false)
-  } 
-  return(
-  <nav>
-    {username && <p>Hello {user.username}</p>}
-    <Link to='cube-pool'>Cube Pool</Link>
-    <Link to='/'>Homepage</Link>
-    {verified ? <Link to='/' onClick={logOut}>Log out</Link> :<Link to='/login'>Login</Link>}
-    <Link to='/signup'>Register</Link>
-    <Link to='/dashboard'>Dashboard</Link>  
-    <Outlet />
-  </nav>
-  )
-}
+    dispatch({ state: 'LOGOUT' });
+  };
+
+  return (
+    <nav>
+      {user ? (
+        <>
+          <div>
+            <Link to='cube-pool'>Cube Pool</Link>
+            <Link to='/dashboard'>Dashboard</Link>
+          </div>
+          <div>
+            <Link to='user-page'>{user?.username}</Link>
+            <Link to='/' onClick={logOut}>
+              Log out
+            </Link>
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <Link to='/'>Homepage</Link>
+          </div>
+          <div>
+            <Link to='/login'>Login</Link>
+            <Link to='/signup'>Register</Link>
+          </div>
+        </>
+      )}
+      <Outlet />
+    </nav>
+  );
+};

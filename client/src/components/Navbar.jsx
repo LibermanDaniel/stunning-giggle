@@ -1,15 +1,18 @@
 import { Link, Outlet } from 'react-router-dom';
 import { useContext } from 'react';
+import { useUserStore } from '../common/useUserStore';
 import { useAuthContext } from '../auth/useAuthContext';
+import { useToken } from '../auth/useToken';
 import { AuthContext } from '../auth/authContext';
 
 export const Navbar = () => {
-  const { dispatch } = useAuthContext();
-  const { user } = useContext(AuthContext);
+  const user = useUserStore((state) => state.user);
+  const removeUser = useUserStore((state) => state.removeUser);
+  const [, setToken] = useToken();
 
   const logOut = () => {
-    localStorage.removeItem('token');
-    dispatch({ state: 'LOGOUT' });
+    setToken(null);
+    removeUser();
   };
 
   return (

@@ -1,12 +1,20 @@
 import { useState, useEffect } from 'react'
 import { useToken } from './useToken'
+import { useUserStore } from '../common/useUserStore'
 
 export const useUser = () => {
-  const [token, setToken] = useToken()
+  const [token,] = useToken()
+  const addUser = useUserStore(state => state.addUser)
+  const removeUser = useUserStore(state => state.removeUser)
 
   const getPayLoadFromToken = token => {
-    const encodedPayLoad = token.split('.')[1]
-    return JSON.parse(window.atob(encodedPayLoad))
+    try {
+      const encodedPayLoad = token.split('.')[1]
+      return JSON.parse(window.atob(encodedPayLoad))
+    }
+    catch {
+      return null
+    }
   }
 
   const [user, setUser] = useState(() => {
@@ -18,17 +26,20 @@ export const useUser = () => {
 
   useEffect(() => {
     if (!token) {
+      removeUser()
       setUser(null)
     } else {
       const decodedJwt = getPayLoadFromToken(token)
-      if (decodedJwt.exp * 1000 < Date.now()) {
-        localStorage.removeItem('token');
+
+      if (!decodedJwt || decodedJwt?.exp * 1000 < Date.now()) {
         setUser(null)
+        removeUser()
       } else {
         setUser(decodedJwt)
+        addUser(decodedJwt)
       }
     }
-  }, [token])
+  }, [addUser, removeUser, token])
 
   return user
 }

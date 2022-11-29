@@ -25,13 +25,7 @@ export const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [, setToken] = useToken();
   const [errorMessage, setErrorMessage] = useState('');
-  const { user } = useContext(AuthContext);
-
   const navigate = useNavigate();
-
-  if (user) {
-    navigate('/');
-  }
 
   const handleLogin = async (event) => {
     event.preventDefault();

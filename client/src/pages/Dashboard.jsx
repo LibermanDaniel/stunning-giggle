@@ -7,6 +7,7 @@ import lodash from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import { useToken } from '../auth/useToken';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -95,6 +96,14 @@ const Dashboard = () => {
 
   const formBuilder = (parameter) => {
     return (
+      <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+
       <FormControl key={uuid()}>
         {parameter.inputFields.map((inputField) => {
           switch (inputField) {
@@ -161,14 +170,29 @@ const Dashboard = () => {
           Submit
         </Button>
       </FormControl>
+      </Box>
     );
   };
 
   return (
     <>
-      <Typography variant='h1' gutterBottom>
+    <Box display="flex"
+          justifyContent="center"
+           alignItems="center">
+
+      <Typography variant='h1' gutterBottom >
         WELCOME TO THE DASHBOARD
       </Typography>
+      </Box>
+
+      <Box
+          sx={{
+
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
 
       <Typography variant='h6' gutterBottom>
         Select Cube
@@ -195,11 +219,24 @@ const Dashboard = () => {
                 );
               })}
           </Select>
+          
         </FormControl>
+        
       </ThemeProvider>
+      </Box>
+      
       {console.log(cube)}
       {lodash.isEmpty(cube) ? null : (
         <>
+              <Box
+          sx={{
+          
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+
           <Typography variant='h6' gutterBottom>
             Select Function
           </Typography>
@@ -227,7 +264,10 @@ const Dashboard = () => {
               </Select>
             </FormControl>
           </ThemeProvider>
+          </Box>
           {parameter === '' ? null : formBuilder(parameter)}
+
+          
         </>
       )}
     </>

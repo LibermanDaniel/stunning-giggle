@@ -1,17 +1,23 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth/authContext';
+import { useAuthContext } from '../auth/useAuthContext';
+import axios from 'axios';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
+
+
+
 
 const theme = createTheme({
   palette: {
@@ -26,7 +32,10 @@ const theme = createTheme({
   },
 });
 
+
 export const UserPage = () => {
+  
+
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
@@ -34,25 +43,11 @@ export const UserPage = () => {
     navigate('/');
   }
 
+
+        
   return (
     <ThemeProvider theme={theme}>
-       <Container maxWidth="sm">
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '100vh',
-          backgroundColor: '#7C9473',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100vh',
-            backgroundColor: '#7C9473',
-          }}
-        >
+      
           <Box
             sx={{
               marginTop: 4,
@@ -68,35 +63,37 @@ export const UserPage = () => {
                   sx={{ width: 56, height: 56 }}
                 />
 
-                <IconButton color='secondary' aria-label='edit'>
+                <IconButton  aria-label='edit'>
                   <EditIcon />
                 </IconButton>
               </Stack>
 
               <Stack direction='row' spacing={1}>
-                <Typography component='h5'>USERNAME</Typography>
-                <Typography component='b1'>GYRO ZEPPELI</Typography>
-                <IconButton color='secondary' aria-label='edit'>
+                <Typography component='h5'>USERNAME：</Typography>
+                <Typography component='b1'>{user?.username}</Typography>
+                <IconButton  aria-label='edit'>
                   <EditIcon />
                 </IconButton>
               </Stack>
 
               <Stack direction='row' spacing={1}>
-                <Typography component='b1'>EMAIL</Typography>
-                <Typography component='h5'>GYRO.ZEPPELI@GYROCUBE.FI</Typography>
-                <IconButton color='primary' aria-label='edit'>
+                <Typography component='b1'>EMAIL：</Typography>
+                <Typography component='h5'>{user?.email}</Typography>
+                <IconButton aria-label='edit'>
                   <EditIcon />
                 </IconButton>
               </Stack>
 
               <button variant='contained' color='#primary'>
-                Reset Password
+              <Link href='reset-password' variant='body2'>
+              Reset Password
+              </Link>
+               
               </button>
             </CssBaseline>
           </Box>
-        </Box>
-      </Box>
-      </Container>
+
+   
     </ThemeProvider>
   );
 };

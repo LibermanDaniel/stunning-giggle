@@ -69,12 +69,18 @@ export const Login = () => {
   return (
     <ThemeProvider theme={theme}>
               <CssBaseline />
-        <Box
-    sx={{
 
-      backgroundColor:"#7C9473"
-    }}
-  >
+          <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            
+            
+          }}
+        >
+    
       <Container component="main" maxWidth="xs" >
 
         <Box
@@ -90,7 +96,8 @@ export const Login = () => {
             backgroundColor:"#FFFFFF"
           }}
         >
-          {<p>{errorMessage}</p>}
+          {<Typography component="body" variant="body">{errorMessage}</Typography>}
+          
           <Avatar sx={{ m: 1, bgcolor: '#7C9473' }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -129,45 +136,14 @@ export const Login = () => {
               sx={{ mt: 3, mb: 2 }}
             >
               Login
-            </Typography>
+            </Button>
             <Box
               component='form'
               onSubmit={handleLogin}
               noValidate
               sx={{ mt: 1 }}
             >
-              <TextField
-                margin='normal'
-                fullWidth
-                id='username'
-                label='Username'
-                name='username'
-                autoComplete='username'
-                autoFocus
-                onChange={handleUsernameChange}
-              />
-              <TextField
-                margin='normal'
-                fullWidth
-                name='password'
-                label='Password'
-                type='password'
-                id='password'
-                autoComplete='current-password'
-                onChange={handlePasswordChange}
-              />
-              <FormControlLabel
-                control={<Checkbox value='remember' color='primary' />}
-                label='Remember me'
-              />
-              <Button
-                type='submit'
-                fullWidth
-                variant='contained'
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Login
-              </Button>
+             
               <Grid container>
                 <Grid item xs>
                   <Link href='forgot-password' variant='body2'>

@@ -1,7 +1,5 @@
 [
-  { "value": "temp", "label": "Temp"},
-  { "value": "humid", "label": "Humid"},
   { "value": "weather", "label": "Weather"},
   { "value": "lamp", "label": "Lamp"},
-  { "value": "city", "lablel": "City"}
+  {"value": "notifications", "label": "Notifications"}
 ]

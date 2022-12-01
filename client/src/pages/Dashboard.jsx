@@ -13,24 +13,32 @@ import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Typography from '@mui/material/Typography';
 import Input from '@mui/material/Input';
+import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
 import parameters from './resources/parameters.json';
 import cubeSides from './resources/cubeSides.json';
+import countriesParameters from './resources/countriesParameters.json';
 
 const Dashboard = () => {
   const [parameter, setParameter] = useState('');
   const [options, setOptions] = useState([]);
+  const [checked, setChecked] = useState([false, false]);
+  const [notifications, setNotifications] = useState({
+    lamp: false,
+    vibration: false,
+    color: null,
+  });
   const [cubes, setCubes] = useState([]);
   const [cube, setCube] = useState('');
   const [cubeSide, setCubeSide] = useState(null);
-  const [functionTarget, setFunctionTarget] = useState(null);
   const [formDetails, setFormDetails] = useState({});
   const [token] = useToken();
 
   const { control, handleSubmit, getValues } = useForm({
     defaultValues: {
-      temp: '',
-      humid: '',
-      color: '',
+      lamp: '#000000',
       weather: '',
     },
   });
@@ -41,6 +49,55 @@ const Dashboard = () => {
   if (!user) {
     navigate('/');
   }
+
+  const notifcationLamp = () => (
+    <>
+      <FormControl>
+        <Typography variant='h6' gutterBottom>
+          Lamp color:
+        </Typography>
+        <Input
+          onChange={handleChange4}
+          type='color'
+          value={notifications.color}
+        />
+      </FormControl>
+    </>
+  );
+
+  const handleChange1 = (event) => {
+    setNotifications({
+      ...notifications,
+      lamp: event.target.checked,
+      vibration: event.target.checked,
+    });
+  };
+
+  const handleChange2 = (event) => {
+    let value = event.target.checked;
+    setNotifications({ ...notifications, lamp: value });
+    setChecked([event.target.checked, checked[1]]);
+  };
+
+  const handleChange3 = (event) => {
+    let value = event.target.checked;
+    setNotifications({ ...notifications, vibration: value });
+  };
+
+  const handleChange4 = (event) => {
+    setNotifications({
+      ...notifications,
+      color: event.target.value,
+    });
+  };
+
+  const toTitleCase = (phrase) => {
+    return phrase
+      .toLowerCase()
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
 
   useEffect(() => {
     (async () => {
@@ -55,7 +112,7 @@ const Dashboard = () => {
         );
         tempFilter = data.map((cubeData) => ({
           value: cubeData.name,
-          label: cubeData.name,
+          label: toTitleCase(cubeData.name.replaceAll('_', ' ')),
         }));
         setCubes(data);
         setOptions(tempFilter);
@@ -78,24 +135,85 @@ const Dashboard = () => {
 
   const functionSelect = () => {
     switch (parameter.value) {
-      case 'temp':
+      case 'lamp':
         return (
-          <FormControl sx={{ m: 3, minWidth: 100 }}>
+          <FormControl>
             <Typography variant='h6' gutterBottom>
-              Temp target:
+              Lamp color:
             </Typography>
             <Controller
-              name='temp'
+              name='lamp'
               control={control}
-              render={({ field: { onChange, placeHolder, value, type } }) => (
+              render={({ field: { onChange } }) => (
                 <Input
                   onChange={onChange}
-                  placeholder={'25'}
-                  type={'number'}
-                  value={getValues('temp')}
+                  type='color'
+                  value={getValues('lamp')}
                 />
               )}
             />
+          </FormControl>
+        );
+
+      case 'weather':
+        return (
+          <FormControl>
+            <Typography variant='h6' gutterBottom>
+              Enter country:
+            </Typography>
+            <Controller
+              name='weather'
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  onChange={onChange}
+                  defaultValue={getValues('weather')}
+                  variant='outlined'
+                  autoWidth={true}
+                  options={countriesParameters}
+                />
+              )}
+            />
+          </FormControl>
+        );
+
+      case 'notifications':
+        return (
+          <FormControl>
+            <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+              <FormControlLabel
+                label='Lamp'
+                control={
+                  <Checkbox
+                    checked={notifications.lamp}
+                    onChange={handleChange2}
+                  />
+                }
+              />
+
+              {notifications.lamp ? notifcationLamp() : null}
+              <FormControlLabel
+                label='Vibration'
+                control={
+                  <Checkbox
+                    checked={notifications.vibration}
+                    onChange={handleChange3}
+                  />
+                }
+              />
+              <FormControlLabel
+                label='Both'
+                control={
+                  <Checkbox
+                    checked={notifications.lamp && notifications.vibration}
+                    indeterminate={
+                      notifications.lamp !== notifications.vibration
+                    }
+                    onChange={handleChange1}
+                  />
+                }
+              />
+            </Box>
           </FormControl>
         );
 
@@ -105,7 +223,31 @@ const Dashboard = () => {
   };
 
   const sendForm = async (e) => {
-    const { data } = await axios.post(
+    if (parameter.value === 'notifications') {
+      await axios.post(
+        '/api/form-details',
+        {
+          cube_id: formDetails.cube_id,
+          id: formDetails.id,
+          user: formDetails.user,
+          cubeSide: cubeSide.value,
+          function: parameter.value,
+          functionTarget: notifications,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+    }
+
+    let functionTarget;
+    if (lodash.has(e[parameter.value], 'value')) {
+      functionTarget = e[parameter.value].value;
+    } else {
+      functionTarget = e[parameter.value];
+    }
+
+    await axios.post(
       '/api/form-details',
       {
         cube_id: formDetails.cube_id,
@@ -113,7 +255,7 @@ const Dashboard = () => {
         user: formDetails.user,
         cubeSide: cubeSide.value,
         function: parameter.value,
-        functionTarget: e.temp,
+        functionTarget: functionTarget,
       },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -126,30 +268,34 @@ const Dashboard = () => {
       <form onSubmit={handleSubmit(sendForm)}>
         <FormControl key={uuid()}>
           {functionSelect()}
-          <Typography variant='h6' gutterBottom>
-            Select Cube Side:
-          </Typography>
-          <FormControl sx={{ m: 3, minWidth: 150 }}>
-            <Select
-              labelId='0'
-              id='selectSide'
-              label='Cube side:'
-              autoWidth
-              defaultValue={cubeSide}
-              variant='outlined'
-              color='primary'
-              onChange={setCubeSide}
-              options={cubeSides}
-            />
+          <FormControl>
+            <FormControl margin='dense'>
+              <Typography variant='h6' gutterBottom>
+                Select Cube Side:
+              </Typography>
+              <Select
+                labelId='0'
+                id='selectSide'
+                label='Cube side:'
+                autoWidth
+                defaultValue={cubeSide}
+                variant='outlined'
+                color='primary'
+                onChange={setCubeSide}
+                options={cubeSides}
+              />
+            </FormControl>
+            <FormControl>
+              <Button
+                variant='outlined'
+                color='primary'
+                type='submit'
+                className='mt-3 fs-5'
+              >
+                Submit
+              </Button>
+            </FormControl>
           </FormControl>
-          <Button
-            variant='outlined'
-            color='primary'
-            type='submit'
-            className='mt-3 fs-5'
-          >
-            Submit
-          </Button>
         </FormControl>
       </form>
     );
@@ -161,38 +307,48 @@ const Dashboard = () => {
         WELCOME TO THE DASHBOARD
       </Typography>
 
-      <Typography variant='h6' gutterBottom>
-        Select Cube
-      </Typography>
-      <FormControl sx={{ m: 3, minWidth: 150 }}>
-        <Select
-          labelId='demo-simple-select-label'
-          id='demo-simple-select'
-          label='Select Cube'
-          variant='outlined'
-          autoWidth
-          defaultValue={cube}
-          onChange={setCube}
-          options={options}
+      <FormControl sx={{ m: 3, minWidth: 275 }}>
+        <Typography variant='h6' gutterBottom>
+          Select cube
+        </Typography>
+        <Controller
+          name='selectCube'
+          control={control}
+          render={({ field }) => (
+            <Select
+              id='dropDownSelectCube'
+              label='Select Cube'
+              variant='outlined'
+              autoWidth={true}
+              defaultValue={cube}
+              onChange={setCube}
+              options={options}
+            />
+          )}
         />
       </FormControl>
 
       {lodash.isEmpty(cube) ? null : (
         <>
-          <Typography variant='h6' gutterBottom>
-            Select Function
-          </Typography>
           <FormControl sx={{ m: 3, minWidth: 150 }}>
-            <Select
-              labelId='demo-simple-select-label'
-              id='demo-simple-select'
-              label='Select Function'
-              autoWidth
-              variant='outlined'
-              defaultValue={parameter}
-              onChange={setParameter}
-              options={parameters}
-            ></Select>
+            <Typography variant='h6' gutterBottom>
+              Select Function
+            </Typography>
+            <Controller
+              name='selectFunction'
+              control={control}
+              render={({ field }) => (
+                <Select
+                  id='dropDownSelectFunction'
+                  label='Select Function'
+                  autoWidth
+                  variant='outlined'
+                  defaultValue={parameter}
+                  onChange={setParameter}
+                  options={parameters}
+                />
+              )}
+            />
           </FormControl>
           {parameter ? formBuilder() : null}
         </>

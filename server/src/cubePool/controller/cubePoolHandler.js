@@ -50,7 +50,7 @@ const ownCube = async (req, res) => {
         res.sendStatus(401)
       }
 
-      const { isVerified, id, username, name } = decodedjwt
+      const { isVerified, id, username, name, email } = decodedjwt
 
       if (id !== userId) {
         res.sendStatus(403)
@@ -66,7 +66,7 @@ const ownCube = async (req, res) => {
       console.log(availableCubes.length)
 
       if (result) {
-        jwt.sign({ id, username, isVerified, name }, config.jwtSecret, { expiresIn: '1h' }, (err, token) => {
+        jwt.sign({ id, username, isVerified, name, email }, config.jwtSecret, { expiresIn: '1h' }, (err, token) => {
           if (err) {
             res.status(200).json(err)
           }

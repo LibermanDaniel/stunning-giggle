@@ -15,11 +15,17 @@ import Typography from '@mui/material/Typography';
 import Input from '@mui/material/Input';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
+import SevereColdTwoToneIcon from '@mui/icons-material/SevereColdTwoTone';
+import AcUnitTwoToneIcon from '@mui/icons-material/AcUnitTwoTone';
+import CloudTwoToneIcon from '@mui/icons-material/CloudTwoTone';
+import WbSunnyTwoToneIcon from '@mui/icons-material/WbSunnyTwoTone';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { Grid } from '@mui/material';
 
 import parameters from './resources/parameters.json';
 import cubeSides from './resources/cubeSides.json';
 import countriesParameters from './resources/countriesParameters.json';
+import { LineCharts } from './LineCharts';
 
 const Dashboard = () => {
   const [parameter, setParameter] = useState('');
@@ -31,6 +37,7 @@ const Dashboard = () => {
     color: null,
   });
   const [cubes, setCubes] = useState([]);
+  const [weather, setWeather] = useState({});
   const [cube, setCube] = useState('');
   const [cubeSide, setCubeSide] = useState(null);
   const [formDetails, setFormDetails] = useState({});
@@ -98,6 +105,20 @@ const Dashboard = () => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
+
+  useEffect(() => {
+    (async () => {
+      const [country, lat, lon] = ['Finland', 64.0, 26.0];
+      const { data } = await axios.get(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+      );
+      const { current_weather } = data;
+      setWeather({
+        country: country,
+        temperature: current_weather.temperature,
+      });
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -242,7 +263,19 @@ const Dashboard = () => {
 
     let functionTarget;
     if (lodash.has(e[parameter.value], 'value')) {
-      functionTarget = e[parameter.value].value;
+      const [country, lat, lon] = e[parameter.value].value.split(',');
+      const { data } = await axios.get(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+      );
+      const { current_weather } = data;
+      functionTarget = {
+        country: country,
+        temperature: current_weather.temperature,
+      };
+      setWeather({
+        country: functionTarget.country,
+        temperature: functionTarget.temperature,
+      });
     } else {
       functionTarget = e[parameter.value];
     }
@@ -261,6 +294,77 @@ const Dashboard = () => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
+  };
+
+  const currentWeather = () => {
+    console.log(weather.temperature);
+    if (parseInt(weather.temperature) >= 25) {
+      return (
+        <Grid>
+          <Box item='true' xs={6} style={{ width: '300px' }}>
+            <Typography> Country: {weather.country}</Typography>
+            <Typography>
+              Temperature: {weather.temperature}°C
+              <WbSunnyTwoToneIcon
+                color={'error'}
+                style={{ paddingTop: '5px' }}
+              />
+            </Typography>
+          </Box>
+        </Grid>
+      );
+    } else if (
+      parseInt(weather.temperature) >= 10 &&
+      weather.temperature < 25
+    ) {
+      return (
+        <Grid>
+          <Box item='true' xs={6} style={{ width: '300px' }}>
+            <Typography> Country: {weather.country}</Typography>
+            <Typography>
+              {' '}
+              Temperature: {weather.temperature}°C
+              <CloudTwoToneIcon
+                color={'warning'}
+                style={{ paddingTop: '5px' }}
+              />
+            </Typography>
+          </Box>
+        </Grid>
+      );
+    } else if (parseInt(weather.temperature) >= 0 && weather.temperature < 10) {
+      return (
+        <Grid>
+          <Box item='true' xs={6} style={{ width: '300px' }}>
+            <Typography> Country: {weather.country}</Typography>
+            <Typography>
+              {' '}
+              Temperature: {weather.temperature}°C
+              <AcUnitTwoToneIcon
+                color={'primary'}
+                style={{ paddingTop: '5px' }}
+              />
+            </Typography>
+          </Box>
+        </Grid>
+      );
+    } else {
+      return (
+        <Grid>
+          <Box item='true' xs={6} style={{ width: '300px' }}>
+            <Typography> Country: {weather.country}</Typography>
+            <Typography>
+              {' '}
+              Temperature: {weather.temperature}°C
+              <SevereColdTwoToneIcon
+                color={'info'}
+                style={{ paddingTop: '5px' }}
+              />
+            </Typography>
+          </Box>
+        </Grid>
+      );
+    }
   };
 
   const formBuilder = () => {
@@ -353,6 +457,8 @@ const Dashboard = () => {
           {parameter ? formBuilder() : null}
         </>
       )}
+      {weather.temperature ? currentWeather() : null}
+      <LineCharts />
     </>
   );
 };

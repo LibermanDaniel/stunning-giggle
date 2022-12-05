@@ -10,6 +10,7 @@ export const useUser = () => {
   const getPayLoadFromToken = token => {
     try {
       const encodedPayLoad = token.split('.')[1]
+      console.log(JSON.parse(window.atob(encodedPayLoad)))
       return JSON.parse(window.atob(encodedPayLoad))
     }
     catch {

@@ -26,9 +26,7 @@ const cubePoolHandler = async (req, res) => {
       }
     })
 
-    console.log("Am here")
     const availableCubes = await Cube.find({ isOn: { $eq: true }, user: { $eq: null } })
-    console.log(availableCubes.length)
     res.status(200).json(availableCubes)
   } catch (e) {
     res.sendStatus(500)
@@ -61,7 +59,6 @@ const ownCube = async (req, res) => {
         res.sendStatus(403)
       }
 
-      console.log("is it working?")
       const result = await Cube.updateOne({ cube_id: cube.cube_id }, { $set: { user: id } }, { upsert: false })
       await User.updateOne({ _id: id }, { $push: { cube: cube.id } })
       const availableCubes = await Cube.find({ isOn: { $eq: true }, user: { $eq: null } })
@@ -80,7 +77,6 @@ const ownCube = async (req, res) => {
   } catch (e) {
     res.sendStatus(500)
   }
-
 }
 
 module.exports = { cubePoolHandler, ownCube }

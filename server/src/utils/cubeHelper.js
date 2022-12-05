@@ -1,5 +1,7 @@
 const { logger } = require('./logger')
 const Cube = require('../models/cube')
+const Measurements = require('../models/measurements')
+
 const { getIo } = require('../networks/socketHandler')
 
 const cubesTracking = async (newCube) => {
@@ -11,8 +13,13 @@ const cubesTracking = async (newCube) => {
 
 }
 
-const handleOwnedCubes = (ownedCubes) => {
-  logger.info("owned cubes")
+const measurementsHandler = async () => {
+  const io = getIo()
+
+
+  const measurements = await Measurements.findOne({}).sort({ createdAt: -1 })
+
+  io.emit('measurements', measurements)
 }
 
-module.exports = { cubesTracking }
+module.exports = { cubesTracking, measurementsHandler }

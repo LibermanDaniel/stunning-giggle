@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../auth/authContext';
+import { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import io from 'socket.io-client';
@@ -57,7 +56,7 @@ export const CubePool = () => {
       socket.off('disconnect');
       socket.off('cubePool');
     };
-  }, [availableCubes]);
+  }, []);
 
   const onClickOwnCube = async (cube) => {
     const response = await axios.put(

@@ -28,10 +28,6 @@ export const SignUp = () => {
 
   const navigate = useNavigate();
 
-  if (user) {
-    navigate('/dashboard');
-  }
-
   const handleRegistration = async (event) => {
     event.preventDefault();
     try {

@@ -2,10 +2,10 @@ const mqtt = require('mqtt')
 const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator')
 
 const { logger } = require('../utils/logger')
-const { cubesTracking } = require('../utils/cubeHelper')
+const { cubesTracking, measurementsHandler } = require('../utils/cubeHelper')
 const { mqtt_secret } = require('../config/config')
 const Cube = require('../models/cube')
-
+const Measurements = require('../models/measurements')
 
 /**
  *  Pasha's GyroCube simulator's topics
@@ -101,8 +101,20 @@ const config = async (message) => {
   }
 }
 
-const measurement = (message) => {
-  // logger.info('')
+const measurement = async (message) => {
+
+  const { humid, temp } = message
+
+  console.log(message)
+
+  const newMeasurements = new Measurements({ humidity: humid, temperature: temp })
+
+  newMeasurements.save(err => {
+    if (err) {
+      logger.error(`MQTT handler | network | Error: ${err}`)
+    }
+  })
+  await measurementsHandler()
 }
 
 const network = async (message) => {

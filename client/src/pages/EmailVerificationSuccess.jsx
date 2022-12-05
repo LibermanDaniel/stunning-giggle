@@ -7,7 +7,7 @@ export const EmailVerificationSuccess = () => {
   useEffect(() => {
     (() =>
       setTimeout(() => {
-        navigate('/dashboard');
+        navigate('/login');
       }, 3000))();
   });
 
@@ -17,7 +17,7 @@ export const EmailVerificationSuccess = () => {
       <p>Thanks for verifying your email!</p>
       <button
         onClick={() => {
-          navigate('/dashboard');
+          navigate('/login');
         }}
       >
         Go to dashboard

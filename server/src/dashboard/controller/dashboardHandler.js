@@ -1,5 +1,6 @@
 const User = require('../../models/user')
 const Cube = require('../../models/cube')
+const Measurements = require('../../models/measurements')
 const jwt = require('jsonwebtoken')
 const config = require('../../config/config')
 
@@ -61,5 +62,17 @@ const applyChanges = async (req, res) => {
   })
 }
 
+const getMeasurements = async (req, res) => {
+  try {
+    const measurements = await Measurements.find({}).sort({ createdAt: -1 }).limit(15)
 
-module.exports = { dashboardHandler }
+    res.status(200).json(measurements)
+  }
+  catch (err) {
+    res.sendStatus(500)
+  }
+
+}
+
+
+module.exports = { dashboardHandler, getMeasurements }

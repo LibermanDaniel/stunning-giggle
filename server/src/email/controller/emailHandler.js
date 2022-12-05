@@ -18,7 +18,7 @@ const emailHandler = async (req, res) => {
 
   await User.updateOne({ username }, { $set: { isVerified: true } })
 
-  jwt.sign({ _id, email, isVerified: true },
+  jwt.sign({ _id, email, username, isVerified: true },
     config.jwtSecret,
     { expiresIn: '1h' },
     (err, token) => {

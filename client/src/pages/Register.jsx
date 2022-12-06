@@ -66,6 +66,16 @@ export const SignUp = () => {
         <Container component='main' maxWidth='xs'>
           <CssBaseline />
           <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            
+            
+          }}
+        >
+          <Box
             sx={{
               p: 3,
               display: 'flex',
@@ -75,6 +85,7 @@ export const SignUp = () => {
               borderColor: 'grey.200',
               boxShadow: 1,
               borderRadius: '16px',
+              backgroundColor:"#FFFFFF",
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: '#7C9473' }}>
@@ -163,6 +174,7 @@ export const SignUp = () => {
                 </Grid>
               </Grid>
             </Box>
+          </Box>
           </Box>
         </Container>
       </ThemeProvider>

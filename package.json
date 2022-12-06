@@ -11,7 +11,9 @@
   "dependencies": {
     "@mui/icons-material": "^5.10.6",
     "concurrently": "^7.3.0",
+    "http-proxy-middleware": "^2.0.6",
     "react-animated-text-content": "^1.0.1",
+    "react-table": "^7.8.0",
     "uuid": "^8.3.2"
   }
 }

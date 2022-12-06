@@ -9,11 +9,11 @@ import { useToken } from '../auth/useToken';
 import { useUserStore } from '../common/useUserStore';
 import { useForm, Controller } from 'react-hook-form';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Typography from '@mui/material/Typography';
 import Input from '@mui/material/Input';
-import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import SevereColdTwoToneIcon from '@mui/icons-material/SevereColdTwoTone';
 import AcUnitTwoToneIcon from '@mui/icons-material/AcUnitTwoTone';
@@ -407,9 +407,23 @@ const Dashboard = () => {
 
   return (
     <>
-      <Typography variant='h1' gutterBottom>
+    <Box display="flex"
+          justifyContent="center"
+           alignItems="center">
+
+      <Typography variant='h1' gutterBottom >
         WELCOME TO THE DASHBOARD
       </Typography>
+      </Box>
+
+      <Box
+          sx={{
+
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
 
       <FormControl sx={{ m: 3, minWidth: 275 }}>
         <Typography variant='h6' gutterBottom>

@@ -9,7 +9,7 @@ const cubePoolRouter = require('./src/cubePool/routes/cubePool')
 const passwordResetRouter = require('./src/passwordReset/routes/passwordReset')
 const middleware = require('./src/utils/middleware')
 const dashboardRouter = require('./src/dashboard/routes/dashboard')
-
+const userPageRouter = require('./src/userPage/routes/userPage')
 const { logger } = require('./src/utils/logger')
 const config = require('./src/config/config')
 const mongoose = require('mongoose')
@@ -40,6 +40,7 @@ app.use('/api/', emailRouter)
 app.use('/api/', passwordResetRouter)
 app.use('/api/', cubePoolRouter)
 app.use('/api/', dashboardRouter)
+app.use('/api/', userPageRouter)
 
 module.exports = app
 

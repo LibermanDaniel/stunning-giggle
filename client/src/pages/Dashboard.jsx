@@ -407,23 +407,11 @@ const Dashboard = () => {
 
   return (
     <>
-    <Box display="flex"
-          justifyContent="center"
-           alignItems="center">
-
-      <Typography variant='h1' gutterBottom >
-        WELCOME TO THE DASHBOARD
-      </Typography>
+      <Box display='flex' justifyContent='center' alignItems='center'>
+        <Typography variant='h1' gutterBottom>
+          WELCOME TO THE DASHBOARD
+        </Typography>
       </Box>
-
-      <Box
-          sx={{
-
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
 
       <FormControl sx={{ m: 3, minWidth: 275 }}>
         <Typography variant='h6' gutterBottom>

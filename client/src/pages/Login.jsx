@@ -62,100 +62,108 @@ export const Login = () => {
 
   return (
     <ThemeProvider theme={theme}>
-              <CssBaseline />
-
-          <Box
+      <CssBaseline />
+      <Grid
+        container
+        component='main'
+        sx={{ height: { lg: '93vh', md: '92.9vh' } }}
+      >
+        <Box
           sx={{
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            
-            
           }}
         >
-    
-      <Container component="main" maxWidth="xs" >
-
-        <Box
-          sx={{
-            p: 3,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            border: 1,
-            borderColor: 'grey.200',
-            boxShadow: 1,
-            borderRadius: '16px',
-            backgroundColor:"#FFFFFF"
-          }}
-        >
-          {<Typography component="body" variant="body">{errorMessage}</Typography>}
-          
-          <Avatar sx={{ m: 1, bgcolor: '#7C9473' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
-          <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
-              autoFocus
-              onChange={handleUsernameChange}
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={handlePasswordChange}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Login
-            </Button>
+          <Container component='main' maxWidth='xs'>
             <Box
-              component='form'
-              onSubmit={handleLogin}
-              noValidate
-              sx={{ mt: 1 }}
+              sx={{
+                p: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                border: 1,
+                borderColor: 'grey.200',
+                boxShadow: 1,
+                borderRadius: '16px',
+                backgroundColor: '#FFFFFF',
+              }}
             >
-             
-              <Grid container>
-                <Grid item xs>
-                  <Link href='forgot-password' variant='body2'>
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href='signup' variant='body2'>
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
+              {
+                <Typography component='body' variant='body'>
+                  {errorMessage}
+                </Typography>
+              }
+
+              <Avatar sx={{ m: 1, bgcolor: '#7C9473' }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component='h1' variant='h5'>
+                Login
+              </Typography>
+              <Box
+                component='form'
+                onSubmit={handleLogin}
+                noValidate
+                sx={{ mt: 1 }}
+              >
+                <TextField
+                  margin='normal'
+                  fullWidth
+                  id='username'
+                  label='Username'
+                  name='username'
+                  autoComplete='username'
+                  autoFocus
+                  onChange={handleUsernameChange}
+                />
+                <TextField
+                  margin='normal'
+                  fullWidth
+                  name='password'
+                  label='Password'
+                  type='password'
+                  id='password'
+                  autoComplete='current-password'
+                  onChange={handlePasswordChange}
+                />
+                <FormControlLabel
+                  control={<Checkbox value='remember' color='primary' />}
+                  label='Remember me'
+                />
+                <Button
+                  type='submit'
+                  fullWidth
+                  variant='contained'
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Login
+                </Button>
+                <Box
+                  component='form'
+                  onSubmit={handleLogin}
+                  noValidate
+                  sx={{ mt: 1 }}
+                >
+                  <Grid container>
+                    <Grid item xs>
+                      <Link href='forgot-password' variant='body2'>
+                        Forgot password?
+                      </Link>
+                    </Grid>
+                    <Grid item>
+                      <Link href='signup' variant='body2'>
+                        {"Don't have an account? Sign Up"}
+                      </Link>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Box>
             </Box>
-          </Box>
+          </Container>
         </Box>
-        
-      </Container>
-      </Box>
+      </Grid>
     </ThemeProvider>
   );
 };

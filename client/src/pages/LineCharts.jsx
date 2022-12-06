@@ -27,12 +27,12 @@ export const LineCharts = () => {
   }, [token]);
 
   const updateMeasurements = () => {
-    let measurementsTemp = measurements
-    measurementsTemp.pop()
-    measurementsTemp.unshift(measurement)
+    let measurementsTemp = measurements;
+    measurementsTemp.pop();
+    measurementsTemp.unshift(measurement);
     setMeasurements(measurementsTemp);
   };
-  
+
   useEffect(() => {
     socket.on('connect', () => {
       setIsConnected(true);
@@ -61,7 +61,7 @@ export const LineCharts = () => {
 
   const humidity = useMemo(
     () => measurements.map((data) => data.humidity),
-    [measurements])
+    [measurements]
   );
 
   const temperature = useMemo(

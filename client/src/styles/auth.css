@@ -3,6 +3,12 @@
   height: 90%;
   margin: auto;
 }
+.logInIllu {
+  width: 90%;
+  height: 90%;
+  margin: auto;
+}
+
 
 @media (max-width: 899px) {
   .signUpContainer {
@@ -10,6 +16,13 @@
     box-shadow: none !important;
   }
   .signUpIllu {
+    display: none;
+  }
+  .logInContainer{
+    border: 0px !important;
+    box-shadow: none !important;
+  }
+  .logInIllu {
     display: none;
   }
 }

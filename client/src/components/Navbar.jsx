@@ -12,9 +12,6 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 
-import "/Users/oaix58/Documents/Project/stunning-giggle/client/src/styles/navbar.css";
-
-
 export const Navbar = () => {
   const { dispatch } = useAuthContext();
   const { user } = useContext(AuthContext);
@@ -26,101 +23,97 @@ export const Navbar = () => {
 
   return (
     <React.Fragment>
+      <Box
+        sx={{
+          backgroundColor: '#7C9473',
+        }}
+      >
+        <AppBar
+          position='static'
+          color='default'
+          elevation={0}
+          sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
+        >
+          <Toolbar sx={{ flexWrap: 'wrap' }}>
+            <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+              GYROCUBE
+            </Typography>
+            <nav className='navigation'>
+              {user ? (
+                <>
+                  <div className='navigation-menu'>
+                    <Link
+                      variant='button'
+                      color='text.primary'
+                      href='#'
+                      underline='none'
+                      sx={{ my: 1, mx: 1.5 }}
+                      to='cube-pool'
+                    >
+                      Cube Pool
+                    </Link>
 
-    <Box
-      sx={{
-        backgroundColor:"#7C9473"
-      }}
-    >
-    <AppBar
-    position="static"
-    color="default"
-    elevation={0}
-    sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
-  >
-        <Toolbar sx={{ flexWrap: 'wrap' }}>
+                    <Link
+                      variant='button'
+                      color='text.primary'
+                      href='#'
+                      underline='none'
+                      sx={{ my: 1, mx: 1.5 }}
+                      to='/dashboard'
+                    >
+                      Dashboard
+                    </Link>
 
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            GYROCUBE 
-          </Typography>
-    <nav className="navigation">
-      {user ? (
-        <>
-          <div className="navigation-menu">
-          
-            <Link               
-              variant="button"
-              color="text.primary"
-              href="#"
-              underline="none"
-              sx={{ my: 1, mx: 1.5 }}
-              to='cube-pool'>Cube Pool
-            </Link>
+                    <IconButton
+                      size='large'
+                      aria-label='account of current user'
+                      aria-haspopup='true'
+                      color='inherit'
+                    >
+                      <Link to='user-page'>{user?.username}</Link>
+                    </IconButton>
 
-            <Link 
-              variant="button"
-              color="text.primary"
-              href="#"
-              underline="none"
-              sx={{ my: 1, mx: 1.5 }}
-              to='/dashboard'>Dashboard
-            </Link>
+                    <button
+                      size='medium'
+                      variant='outlined'
+                      sx={{ my: 1, mx: 1.5 }}
+                      color='#primary'
+                    >
+                      <Link to='/' underline='none' onClick={logOut}>
+                        Log out
+                      </Link>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className='navigation-menu'>
+                    <Link
+                      variant='button'
+                      underline='none'
+                      href='#'
+                      color='text.primary'
+                      sx={{ my: 1, mx: 1.5 }}
+                      to='/'
+                    >
+                      Homepage
+                    </Link>
 
-            <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-haspopup="true"
+                    <button>
+                      <Link to='/login'>Login</Link>
+                    </button>
 
-                color="inherit"
-              >
-            <Link to='user-page'>{user?.username}</Link>
-            </IconButton>
-
-            <button size="medium" variant="outlined" sx={{ my: 1, mx: 1.5 }} color='#primary'> 
-            <Link to='/' underline="none" onClick={logOut}>
-              Log out
-            </Link>
-            </button>
-
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="navigation-menu">
-            <Link 
-            variant="button"
-            underline="none"
-            href="#"
-            color="text.primary"
-            
-            sx={{ my: 1, mx: 1.5 }}
-            to='/'>Homepage</Link>
-
-         
-           <button> 
-
-            <Link 
-            to='/login'>
-              Login
-              </Link>
-            </button>
-           
-            <button> 
-            <Link
-            to='/signup'>
-              Register
-              </Link>
-            </button>
-            
-
-          </div>
-        </>
-      )}
-      <Outlet />
-    </nav>
-    </Toolbar>
-    </AppBar>
-    </Box>
+                    <button>
+                      <Link to='/signup'>Register</Link>
+                    </button>
+                  </div>
+                </>
+              )}
+              <Outlet />
+            </nav>
+          </Toolbar>
+        </AppBar>
+      </Box>
     </React.Fragment>
   );
 };

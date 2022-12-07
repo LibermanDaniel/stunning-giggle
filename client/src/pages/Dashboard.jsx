@@ -17,7 +17,7 @@ import {
   Tabs,
   Tab,
   Box,
-  Collapse,
+  Alert,
   Button,
   FormControl,
   Typography,
@@ -43,16 +43,17 @@ const Dashboard = () => {
   const [expand, setExpand] = useState(false);
   const [tab, setTab] = useState(0);
   const [checked, setChecked] = useState([false, false]);
+  const [forApiCall, setForApiCall] = useState([]);
   const [notifications, setNotifications] = useState({
     lamp: false,
     vibration: false,
-    color: null,
+    color: '#000000',
   });
   const [cubes, setCubes] = useState([]);
   const [weather, setWeather] = useState({});
   const [cube, setCube] = useState('');
   const [cubeSide, setCubeSide] = useState(null);
-  const [formDetails, setFormDetails] = useState({});
+  const [successMessage, setSuccessMessage] = useState('');
   const [token] = useToken();
 
   const { control, handleSubmit, getValues } = useForm({
@@ -76,6 +77,7 @@ const Dashboard = () => {
           Lamp color:
         </Typography>
         <Input
+          autoFocus={true}
           onChange={handleChange4}
           type='color'
           value={notifications.color}
@@ -131,6 +133,12 @@ const Dashboard = () => {
       });
     })();
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 2500);
+  }, [successMessage]);
 
   useEffect(() => {
     (async () => {
@@ -247,56 +255,61 @@ const Dashboard = () => {
   };
 
   const sendForm = async (e) => {
-    if (parameter.value === 'notifications') {
-      await axios.post(
+    try {
+      if (parameter.value === 'notifications') {
+        const { data } = await axios.post(
+          '/api/form-details',
+          {
+            cube_id: cube.cube_id,
+            id: cube.id,
+            user: cube.user,
+            cubeSide: cubeSide.value,
+            function: parameter.value,
+            functionTarget: notifications,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setSuccessMessage(data.message);
+      }
+
+      let functionTarget;
+      if (lodash.has(e[parameter.value], 'value')) {
+        const [country, lat, lon] = e[parameter.value].value.split(',');
+        setForApiCall(e[parameter.value].value.split(','));
+        const { data } = await axios.get(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+        );
+        const { current_weather } = data;
+        functionTarget = {
+          country: country,
+          temperature: current_weather.temperature,
+        };
+        setWeather({
+          country: functionTarget.country,
+          temperature: functionTarget.temperature,
+        });
+      } else {
+        functionTarget = e[parameter.value];
+      }
+
+      const { data } = await axios.post(
         '/api/form-details',
         {
-          cube_id: formDetails.cube_id,
-          id: formDetails.id,
-          user: formDetails.user,
+          cube_id: cube.cube_id,
+          id: cube.id,
+          user: cube.user,
           cubeSide: cubeSide.value,
           function: parameter.value,
-          functionTarget: notifications,
+          functionTarget: functionTarget,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-    }
-
-    let functionTarget;
-    if (lodash.has(e[parameter.value], 'value')) {
-      const [country, lat, lon] = e[parameter.value].value.split(',');
-      const { data } = await axios.get(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
-      );
-      const { current_weather } = data;
-      functionTarget = {
-        country: country,
-        temperature: current_weather.temperature,
-      };
-      setWeather({
-        country: functionTarget.country,
-        temperature: functionTarget.temperature,
-      });
-    } else {
-      functionTarget = e[parameter.value];
-    }
-
-    await axios.post(
-      '/api/form-details',
-      {
-        cube_id: formDetails.cube_id,
-        id: formDetails.id,
-        user: formDetails.user,
-        cubeSide: cubeSide.value,
-        function: parameter.value,
-        functionTarget: functionTarget,
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+      setSuccessMessage(data.message);
+    } catch (e) {}
   };
 
   const currentWeather = () => {
@@ -400,6 +413,15 @@ const Dashboard = () => {
       alignItems='center'
       wrap='wrap'
     >
+      {successMessage && (
+        <Alert
+          severity='success'
+          style={{ top: 0, right: 0, position: 'absolute' }}
+        >
+          {successMessage}
+        </Alert>
+      )}
+
       <CssBaseline />
 
       <Grid

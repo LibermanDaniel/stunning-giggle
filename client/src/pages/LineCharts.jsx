@@ -43,8 +43,7 @@ export const LineCharts = () => {
     });
 
     socket.on('measurements', (data) => {
-      setMeasurement(data);
-      updateMeasurements();
+      updateMeasurements(data);
     });
 
     return () => {

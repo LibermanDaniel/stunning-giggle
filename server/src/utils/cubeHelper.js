@@ -17,7 +17,7 @@ const measurementsHandler = async () => {
   const io = getIo()
 
 
-  const measurements = await Measurements.findOne({}).sort({ createdAt: -1 })
+  const measurements = await Measurements.find({}).sort({ createdAt: -1 }).limit(15)
 
   io.emit('measurements', measurements)
 }

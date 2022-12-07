@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
-
 import io from 'socket.io-client';
 import axios from 'axios';
 import { useToken } from '../auth/useToken';
 import { useNavigate } from 'react-router-dom';
+import { Paper, Grid, Box, Divider, CssBaseline } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
@@ -68,71 +68,71 @@ export const CubePool = () => {
     setToken(response.data.token);
     setAvailableCubes(response.data.cubes);
   };
-  /**
-   * TODO:
-   * 1. Modify the list into mui
-   * 2. Make functions for name corrections(name, config, etc)
-   * 3. Break down the available cubes into 2 components
-   * 4. Component 1: AvailableCubes
-   * 5. Component 2: AvailableCube
-   *
-   */
+
+  const parseSides = (side) => {
+    return (
+      [
+        'side_one',
+        'side_two',
+        'side_three',
+        'side_four',
+        'side_five',
+        'side_six',
+      ].indexOf(side) + 1
+    );
+  };
+
   return (
-    <>
+    <Grid
+      container
+      component='main'
+      direction='row'
+      alignContent='center'
+      alignItems='center'
+      wrap='wrap'
+    >
+      <CssBaseline />
       {availableCubes
         ? availableCubes.map((cube) => (
-            <Card
-              sx={{ maxWidth: 500, maxHeight: 650 }}
-              style={{ flex: 1, flexDirection: 'column', flexWrap: 'wrap' }}
-              key={uuid()}
-            >
-              <CardContent
-                style={{
-                  marginBottom: '10px',
-                  flex: 1,
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Typography gutterBottom variant='h5' component='div'>
-                  {cube.name} - {cube.cube_id}
-                </Typography>
-                <div
-                  style={{
-                    height: '100px',
-                    width: '100px',
-                    backgroundColor: `#${Math.floor(
-                      Math.random() * 16777215
-                    ).toString(16)}`,
-                  }}
-                />
-                <Typography variant='h5'>Config</Typography>
-                <ul>
-                  <li>Current Side: {cube.currentSide}</li>
-                  {Object.entries(cube.config).map(([key, value]) => (
-                    <li key={uuid()}>
-                      {key}{' '}
-                      <ol>
-                        {Object.entries(value).map(([key, value]) => (
-                          <li key={uuid()}>
-                            {' '}
-                            {key}: {value}{' '}
-                          </li>
-                        ))}
-                      </ol>
-                    </li>
+            <Grid item xs={4}>
+              <Card key={uuid()}>
+                <CardContent>
+                  <Typography gutterBottom variant='h6' component='div'>
+                    {cube.name} - {cube.cube_id}
+                  </Typography>
+                  <div
+                    style={{
+                      height: '100px',
+                      width: '100px',
+                      backgroundColor: `#${Math.floor(
+                        Math.random() * 16777215
+                      ).toString(16)}`,
+                    }}
+                  />
+                  <Typography>Current Side: {cube.currentSide}</Typography>
+                  {Object.entries(cube.config).map(([key, value, index]) => (
+                    <Grid item sx={3}>
+                      <Box>{parseSides(key)}</Box>
+                      {Object.entries(value).map(([key, value]) => (
+                        <Typography>
+                          {key}: {value}
+                        </Typography>
+                      ))}
+                    </Grid>
                   ))}
-                </ul>
-                <Button
-                  onClick={() => {
-                    onClickOwnCube(cube);
-                  }}
-                >
-                  Own now!
-                </Button>
-              </CardContent>
-            </Card>
+
+                  <Button
+                    onClick={() => {
+                      onClickOwnCube(cube);
+                    }}
+                  >
+                    Own now!
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
           ))
         : null}
-    </>
+    </Grid>
   );
 };

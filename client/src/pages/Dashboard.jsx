@@ -413,7 +413,7 @@ const Dashboard = () => {
         </Typography>
       </Box>
 
-      <FormControl sx={{ m: 3, minWidth: 275 }}>
+      <FormControl sx={{minWidth: 275 }}>
         <Typography variant='h6' gutterBottom>
           Select cube
         </Typography>

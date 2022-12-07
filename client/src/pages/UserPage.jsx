@@ -7,7 +7,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import EditIcon from '@mui/icons-material/Edit';
@@ -15,6 +14,9 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import FormControl from '@mui/material/FormControl';
 import { ImageList, Input, p } from '@mui/material';
+
+import { ForgotPasswordLanding } from './ForgotPasswordLanding'
+
 
 const theme = createTheme({
   palette: {
@@ -73,39 +75,30 @@ export const UploadAndDisplayImage = ({ ...props }) => {
 export const UserPage = () => {
   const [userData, setUserData] = useState({});
   const [cubes, setCubes] = useState([]);
-  const [usernameChange, setUsernameChange] = useState(false);
   const [emailChange, setEmailChange] = useState(false);
+  const [emailSave, setEmailSave] = useState(false);
   const [token] = useToken();
   const navigate = useNavigate();
 
   const handleSaveEmailButton = () => {
-    console.log('save email');
+    setEmailSave(!emailSave);
+    console.log("save email")
   };
 
   const handleEditEmailButton = () => {
     setEmailChange(!emailChange);
   };
 
+  const resetEmailButton = () => {
+    <ForgotPasswordLanding/>
+    console.log("reset")
+  };
+
+
   const EmailChange = () => {
     return (
       <FormControl sx={{ m: 3, minWidth: `${userData.email.length}ch` }}>
         <input type='text' placeholder={userData.email} />
-      </FormControl>
-    );
-  };
-
-  const handleSaveUsernameButton = () => {
-    console.log('save Username');
-  };
-
-  const handleEditUsernameButton = () => {
-    setUsernameChange(!usernameChange);
-  };
-
-  const UsernameChange = () => {
-    return (
-      <FormControl sx={{ m: 3, minWidth: `${userData.username.length}ch` }}>
-        <input type='text' placeholder={userData.username} />
       </FormControl>
     );
   };
@@ -125,35 +118,44 @@ export const UserPage = () => {
       {console.log(userData)}{' '}
       <Box
         sx={{
+          marginTop: 6,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+
+        }}
+      >
+        <CssBaseline>
+          <UploadAndDisplayImage />
+          <Box
+
+        sx={{
           marginTop: 4,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
         }}
       >
-        <CssBaseline>
-          <UploadAndDisplayImage />
-          <Stack direction='row' spacing={1}>
+      
+
+          <Stack direction='row' spacing={1} mt={2}>
             <Typography component='h5'>USERNAME：</Typography>
-            {usernameChange ? (
-              <UsernameChange />
-            ) : (
-              <Typography component='b1'>{userData?.username}</Typography>
-            )}
-            <Button variant='contained'>Save</Button>
-            <IconButton aria-label='edit' onClick={handleEditUsernameButton}>
-              <EditIcon />
-            </IconButton>
+            <Typography component='b1'>{userData?.username}</Typography>
           </Stack>
 
-          <Stack direction='row' spacing={1}>
+          <Stack direction='row' spacing={1} mt={1}>
             <Typography component='b1'>EMAIL：</Typography>
 
             {emailChange
               ? (() => (
                   <>
                     <EmailChange />
-                    <Button variant='contained'>Save</Button>
+                    <Button variant='contained' 
+                    size="small"
+                     onClick={handleSaveEmailButton}
+                    >Save</Button>
+
                   </>
                 ))()
               : (() => (
@@ -168,12 +170,10 @@ export const UserPage = () => {
                   </>
                 ))()}
           </Stack>
-
-          <button variant='contained' color='#primary'>
-            <Link href='reset-password' variant='body2'>
+</Box>
+          <Button variant='contained' color='#primary' onClick={resetEmailButton}>
               Reset Password
-            </Link>
-          </button>
+          </Button>
         </CssBaseline>
       </Box>
     </ThemeProvider>

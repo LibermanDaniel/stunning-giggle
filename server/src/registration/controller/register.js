@@ -9,7 +9,7 @@ const { passwordValidator, emailValidator } = require('../../utils/validator')
 
 const registerationHandler = async (req, res) => {
   const { username, password, email } = req.body
-  console.log('req body',req.body)
+  console.log('req body', req.body)
   try {
     const salt = await bcrypt.genSalt(10)
     const verificationString = uuid()
@@ -59,7 +59,7 @@ const registerationHandler = async (req, res) => {
         email,
         isVerified: false
       }, config.jwtSecret, {
-        expiresIn: '1h'
+        expiresIn: '2d'
       }, (err, token) => {
         if (err) {
           return res.status(500).json({ message: 'Error occurred!' })

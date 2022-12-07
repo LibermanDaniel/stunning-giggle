@@ -20,7 +20,7 @@ const emailHandler = async (req, res) => {
 
   jwt.sign({ _id, email, username, isVerified: true },
     config.jwtSecret,
-    { expiresIn: '1h' },
+    { expiresIn: '2d' },
     (err, token) => {
       if (err) {
         return res.sendStatus(500)

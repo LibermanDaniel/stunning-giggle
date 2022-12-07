@@ -4,7 +4,14 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { useToken } from '../auth/useToken';
 import { useNavigate } from 'react-router-dom';
-import { Paper, Grid, Box, Divider, CssBaseline } from '@mui/material';
+import {
+  Paper,
+  Grid,
+  Box,
+  Divider,
+  CssBaseline,
+  CardHeader,
+} from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
@@ -12,7 +19,6 @@ import Typography from '@mui/material/Typography';
 import { useUser } from '../auth/useUser';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea, CardActions } from '@mui/material';
-
 
 import { experimentalStyled as styled } from '@mui/material/styles';
 import { ClassNames } from '@emotion/react';
@@ -88,56 +94,77 @@ export const CubePool = () => {
     );
   };
   return (
-    <Grid container spacing={10}
-      direction="row"
-      justifyContent="space-evenly"
-      alignItems="flex-start"
+    <Grid
+      container
+      spacing={10}
+      direction='row'
+      justifyContent='space-evenly'
+      wrap='wrap'
+      alignItems='flex-start'
     >
       <CssBaseline />
-      {availableCubes ? availableCubes.map((cube) => (
-        <Grid item xs={12} sm={6} md={4}
-        sx={{mx: 2}}
-      >
-        <Card sx={{ maxWidth: 500 }}>
-          <CardActionArea>
-            <CardMedia  component="img"
-              height="140"
-              alt={cube.name}
-              sx={{
-                  backgroundColor: `#${Math.floor(
-                    Math.random() * 16777215
-                  ).toString(16)}`
-              }}
-            />
-            <CardContent>
-              <Typography>
-                Current Side: {cube.currentSide}
-              </Typography>
-              {Object.entries(cube.config).map(([key, value, index]) => (
-                <Grid item sx={3}>
-                  <Box>{parseSides(key)}</Box>
-                  {Object.entries(value).map(([key, value]) => (
-                    <Typography>
-                      {key}: {value}
-                    </Typography>
-                  ))}
-                </Grid>
-              ))}
-            </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Button size="small" color="primary"
-              onClick={() => {
-                onClickOwnCube(cube);
-              }}
+      {availableCubes
+        ? availableCubes.map((cube) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              sx={{ marginTop: '2%', marginLeft: '1%', marginBottom: '1%' }}
             >
-              OWN ME
-            </Button>
-          </CardActions>
-        </Card>
-      </Grid>
-      )):null}
-
+              <Card
+                sx={{
+                  minWidth: 440,
+                  maxWidth: 440,
+                  minHeight: 530,
+                  maxHeight: 530,
+                }}
+              >
+                <CardActionArea
+                  onClick={() => {
+                    onClickOwnCube(cube);
+                  }}
+                >
+                  <CardHeader
+                    component='div'
+                    height='200'
+                    title={cube.name}
+                    sx={{
+                      backgroundColor: `#${Math.floor(
+                        Math.random() * 16777215
+                      ).toString(16)}`,
+                    }}
+                  />
+                  <CardContent sx={{ minWidth: 400 }}>
+                    <Typography>Current Side: {cube.currentSide}</Typography>
+                    {Object.entries(cube.config).map(([key, value, index]) => (
+                      <Grid item xs={3}>
+                        <Box>Side {parseSides(key)}</Box>
+                        {Object.entries(value).map(([key, value]) => (
+                          <Typography sx={{ minWidth: 400 }}>
+                            {key}: {value}
+                          </Typography>
+                        ))}
+                      </Grid>
+                    ))}
+                  </CardContent>
+                </CardActionArea>
+                <CardActions>
+                  <Button
+                    size='small'
+                    color='primary'
+                    onClick={() => {
+                      onClickOwnCube(cube);
+                    }}
+                    sx={{ display: 'absolute' }}
+                  >
+                    Take me!
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))
+        : null}
     </Grid>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
-import { Box } from '@mui/material';
+import { Box, Grid, CssBaseline, Paper } from '@mui/material';
 
 import { useToken } from '../auth/useToken';
 import { LineChart } from './LineChart';
@@ -72,18 +72,52 @@ export const LineCharts = () => {
   console.log(measurements);
 
   return (
-    <>
-      <Box
-        style={{ display: 'flex', flexFlow: 'row' }}
-        sx={{ m: 3, width: 700 }}
-      >
-        <LineChart
-          title={'Temperature'}
-          labels={labels}
-          measurements={temperature}
-        />
-        <LineChart title={'Humidity'} labels={labels} measurements={humidity} />
-      </Box>
-    </>
+    <Grid
+      container
+      component='main'
+      direction='row'
+      alignContent='center'
+      alignItems='center'
+    >
+      <CssBaseline />
+
+      <Grid item xs={6}>
+        <Paper
+          elevation={6}
+          sx={{
+            width: '62%',
+            height: '62%',
+            margin: 'auto',
+            marginLeft: '30%',
+            marginTop: '2%',
+          }}
+        >
+          <LineChart
+            title={'Temperature'}
+            labels={labels}
+            measurements={temperature}
+          />
+        </Paper>
+      </Grid>
+
+      <Grid item xs={6}>
+        <Paper
+          elevation={6}
+          sx={{
+            width: '62%',
+            height: '62%',
+            margin: 'auto',
+            marginRight: '30%',
+            marginTop: '2%',
+          }}
+        >
+          <LineChart
+            title={'Humidity'}
+            labels={labels}
+            measurements={humidity}
+          />
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };

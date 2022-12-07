@@ -24,16 +24,18 @@ export const LineChart = ({ title, measurements, labels }) => {
   let scales;
   if (title === 'Temperature') {
     scales = {
-      yAxis: {
+      y: {
         min: 0,
         max: 50,
+        step: 1,
       },
     };
   } else {
     scales = {
-      yAxis: {
+      y: {
         min: 0,
         max: 100,
+        step: 1,
       },
     };
   }
@@ -48,8 +50,8 @@ export const LineChart = ({ title, measurements, labels }) => {
         display: true,
         text: title,
       },
-      scales,
     },
+    scales: scales,
   };
 
   const data = {

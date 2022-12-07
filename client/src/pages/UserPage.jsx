@@ -16,6 +16,8 @@ import Stack from '@mui/material/Stack';
 import FormControl from '@mui/material/FormControl';
 import { ImageList, Input, p } from '@mui/material';
 
+import { ForgotPasswordLanding } from './ForgotPasswordLanding';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -86,6 +88,10 @@ export const UserPage = () => {
     setEmailChange(!emailChange);
   };
 
+  const resetPassword = () => {
+    console.log('reset');
+  };
+
   const EmailChange = () => {
     return (
       <FormControl sx={{ m: 3, minWidth: `${userData.email.length}ch` }}>
@@ -133,22 +139,13 @@ export const UserPage = () => {
       >
         <CssBaseline>
           <UploadAndDisplayImage />
-          <Stack direction='row' spacing={1}>
+          <Stack direction='row' spacing={1} mt={1}>
             <Typography component='h5'>USERNAME：</Typography>
-            {usernameChange ? (
-              <UsernameChange />
-            ) : (
-              <Typography component='b1'>{userData?.username}</Typography>
-            )}
-            <Button variant='contained'>Save</Button>
-            <IconButton aria-label='edit' onClick={handleEditUsernameButton}>
-              <EditIcon />
-            </IconButton>
+            <Typography component='b1'>{userData?.username}</Typography>
           </Stack>
 
-          <Stack direction='row' spacing={1}>
+          <Stack direction='row' spacing={1} mt={1}>
             <Typography component='b1'>EMAIL：</Typography>
-
             {emailChange
               ? (() => (
                   <>
@@ -169,11 +166,9 @@ export const UserPage = () => {
                 ))()}
           </Stack>
 
-          <button variant='contained' color='#primary'>
-            <Link href='reset-password' variant='body2'>
-              Reset Password
-            </Link>
-          </button>
+          <Button variant='contained' color='#primary' onClick={resetPassword}>
+            Reset Password
+          </Button>
         </CssBaseline>
       </Box>
     </ThemeProvider>

@@ -81,7 +81,7 @@ export const UserPage = () => {
 
   const handleSaveEmailButton = () => {
     setEmailSave(!emailSave);
-    console.log("save email")
+    console.log('save email');
   };
 
   const handleEditEmailButton = () => {
@@ -92,18 +92,9 @@ export const UserPage = () => {
     console.log('reset');
   };
 
-  const EmailChange = () => {
-    return (
-      <FormControl sx={{ m: 3, minWidth: `${userData.email.length}ch` }}>
-        <input type='text' placeholder={userData.email} />
-      </FormControl>
-    );
-  };
-
   const handleSaveUsernameButton = () => {
     console.log('save Username');
   };
-
 
   const EmailChange = () => {
     return (
@@ -133,7 +124,6 @@ export const UserPage = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-
         }}
       >
         <CssBaseline>
@@ -149,11 +139,13 @@ export const UserPage = () => {
               ? (() => (
                   <>
                     <EmailChange />
-                    <Button variant='contained' 
-                    size="small"
-                     onClick={handleSaveEmailButton}
-                    >Save</Button>
-
+                    <Button
+                      variant='contained'
+                      size='small'
+                      onClick={handleSaveEmailButton}
+                    >
+                      Save
+                    </Button>
                   </>
                 ))()
               : (() => (

@@ -90,7 +90,6 @@ export const UserPage = () => {
   };
 
   const resetEmailButton = () => {
-    <ForgotPasswordLanding/>
     console.log("reset")
   };
 

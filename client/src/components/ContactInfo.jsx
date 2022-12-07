@@ -8,11 +8,13 @@ import YouTuBeIcon from '@mui/icons-material/YouTube';
 import AlarmIcon from '@mui/icons-material/Alarm';
 import EmailIcon from '@mui/icons-material/Email';
 import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
 
 
 export default function ContactInfo() {
   return (
           <Box>
+             <Grid  mt={8} ml={4} mb={8}>
             <Container>
             <Typography variant="h2" color="white">
             CONTACT US
@@ -22,12 +24,14 @@ export default function ContactInfo() {
             <YouTuBeIcon />
             </IconButton>
             </a>
-  
 
-            <Typography variant="h5" component="h2" color="white">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id volutpat lacus laoreet non curabitur gravida arcu. Feugiat nisl pretium fusce id velit ut tortor. Egestas congue quisque egestas diam in. Venenatis lectus magna fringilla urna porttitor rhoncus dolor.
-            </Typography>
             </Container>
+            </Grid>
+            <Container maxWidth="sm" >
+          <Typography color="#FFFFFF" variant="body1">
+          &copy; GRYOCUBE TEAM {new Date().getFullYear()} 
+          </Typography>
+        </Container>
           </Box>
   );
 }

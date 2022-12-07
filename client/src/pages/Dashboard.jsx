@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import axios from 'axios';
 import lodash from 'lodash';
@@ -413,7 +413,7 @@ const Dashboard = () => {
         </Typography>
       </Box>
 
-      <FormControl sx={{ m: 3, minWidth: 275 }}>
+      <FormControl sx={{minWidth: 275 }}>
         <Typography variant='h6' gutterBottom>
           Select cube
         </Typography>

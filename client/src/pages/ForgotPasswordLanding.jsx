@@ -1,51 +1,62 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { ForgotPasswordFail } from './ForgotPasswordFail'
-import { ForgotPasswordSuccess } from './ForgotPasswordSuccess'
+import { ForgotPasswordFail } from './ForgotPasswordFail';
+import { ForgotPasswordSuccess } from './ForgotPasswordSuccess';
 
 export const ForgotPasswordLanding = () => {
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [isFailure, setIsFailure] = useState(false)
-  const [passwordValue, setPasswordValue] = useState('')
-  const [confirmPasswordValue, setConfirmPasswordValue] = useState('')
-  const { passwordString } = useParams()
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isFailure, setIsFailure] = useState(false);
+  const [passwordValue, setPasswordValue] = useState('');
+  const [confirmPasswordValue, setConfirmPasswordValue] = useState('');
+  const { passwordString } = useParams();
 
   const onResetClick = async () => {
     try {
-      await axios.put(`/api/${passwordString}/reset-password`, {newPassword: passwordValue})
-      setIsSuccess(true)
-      setIsFailure(false)
-
+      await axios.put(`/api/${passwordString}/reset-password`, {
+        newPassword: passwordValue,
+      });
+      setIsSuccess(true);
+      setIsFailure(false);
     } catch (e) {
-      setIsFailure(true)
-      setIsSuccess(false)
+      setIsFailure(true);
+      setIsSuccess(false);
     }
-  }
+  };
 
-  if (isFailure) return <ForgotPasswordFail/>
-  if(isSuccess) return <ForgotPasswordSuccess/>
+  if (isFailure) return <ForgotPasswordFail />;
+  if (isSuccess) return <ForgotPasswordSuccess />;
 
   return (
     <div>
       <h1>Reset Password</h1>
       <p>Please enter your new password</p>
-      <label htmlFor="password">Password: </label>
+      <label htmlFor='password'>Password: </label>
       <input
-        type="password"
-        placeholder="Password"
-        onChange={(e)=> {setPasswordValue(e.target.value)}}
+        type='password'
+        placeholder='Password'
+        onChange={(e) => {
+          setPasswordValue(e.target.value);
+        }}
       />
-      <label htmlFor="password">Confirm Password: </label>
+      <label htmlFor='password'>Confirm Password: </label>
       <input
-        type="password"
-        placeholder="Confirm password"
-        onChange={(e)=> {setConfirmPasswordValue(e.target.value)}} 
+        type='password'
+        placeholder='Confirm password'
+        onChange={(e) => {
+          setConfirmPasswordValue(e.target.value);
+        }}
       />
       <button
-        disabled={!passwordValue || !confirmPasswordValue || passwordValue !== confirmPasswordValue}
+        disabled={
+          !passwordValue ||
+          !confirmPasswordValue ||
+          passwordValue !== confirmPasswordValue
+        }
         onClick={onResetClick}
-      >Reset Password</button>
+      >
+        Reset Password
+      </button>
     </div>
-  )
-}
+  );
+};

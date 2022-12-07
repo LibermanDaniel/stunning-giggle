@@ -8,6 +8,8 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
 
 export const Navbar = () => {
   const user = useUserStore((state) => state.user);
@@ -19,6 +21,9 @@ export const Navbar = () => {
     setToken(null);
     removeUser();
   };
+
+  const main_c = "#7C9473"
+  const pages = ['Products', 'Pricing', 'Blog'];
 
   return (
     <>
@@ -33,84 +38,84 @@ export const Navbar = () => {
           elevation={0}
           sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
         >
-          <Toolbar sx={{ flexWrap: 'wrap' }}>
-            <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-              GYROCUBE
-            </Typography>
-            <nav className='navigation'>
+          <Container>
+            <Toolbar sx={{ flexWrap: 'wrap' }}>
+              <Typography
+                variant="h5"
+                noWrap
+                component={Link} to="/"
+                sx={{
+                  mr: 2,
+                  display: { md: 'flex' },
+                  fontFamily: 'monospace',
+                  fontWeight: 700,
+                  letterSpacing: '.3rem',
+                  color: 'inherit',
+                  textDecoration: 'none',
+                }}
+              >
+                GYROCUBE
+              </Typography>
               {user ? (
-                <>
-                  <div className='navigation-menu'>
-                    <Link
-                      variant='button'
-                      color='text.primary'
-                      href='#'
-                      underline='none'
-                      sx={{ my: 1, mx: 1.5 }}
-                      to='cube-pool'
+                <><Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                  <Button
+                    component={Link} to="/cube-pool"
+                    size="large"
+                    sx={{ my: 2, color: 'black', display: 'block', }}
+                  >
+                    Cube Pool
+                  </Button>
+                  <Button
+                    component={Link} to="/dashboard"
+                    size="large"
+                    sx={{ m: 2, color: 'black', display: 'block' }}
+                  >
+                    Dashboard
+                  </Button>
+                </Box>
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'flex-end' } }}>
+                    <Button
+                      component={Link} to="/user-page"
+                      size="large"
+                      variant="contained"
+                      sx={{ m: 2, color: 'white', display: 'block'}}
                     >
-                      Cube Pool
-                    </Link>
-
-                    <Link
-                      variant='button'
-                      color='text.primary'
-                      href='#'
-                      underline='none'
-                      sx={{ my: 1, mx: 1.5 }}
-                      to='/dashboard'
+                      {user?.username}
+                    </Button>
+                    <Button
+                      component={Link} to="/"
+                      size="large"
+                      variant="outlined"
+                      sx={{ my: 2, color: 'black', display: 'block'}}
+                      onClick={() => {
+                        logOut();
+                      }}
                     >
-                      Dashboard
-                    </Link>
-
-                    <IconButton
-                      size='large'
-                      aria-label='account of current user'
-                      aria-haspopup='true'
-                      color='inherit'
-                    >
-                      <Link to='user-page'>{user?.username}</Link>
-                    </IconButton>
-
-                    <button
-                      size='medium'
-                      variant='outlined'
-                      sx={{ my: 1, mx: 1.5 }}
-                      color='#primary'
-                    >
-                      <Link to='/' underline='none' onClick={logOut}>
-                        Log out
-                      </Link>
-                    </button>
-                  </div>
-                </>
+                      Log Out
+                    </Button>
+                  </Box></>
               ) : (
-                <>
-                  <div className='navigation-menu'>
-                    <Link
-                      variant='button'
-                      underline='none'
-                      href='#'
-                      color='text.primary'
-                      sx={{ my: 1, mx: 1.5 }}
-                      to='/'
-                    >
-                      Homepage
-                    </Link>
-
-                    <button>
-                      <Link to='/login'>Login</Link>
-                    </button>
-
-                    <button>
-                      <Link to='/signup'>Register</Link>
-                    </button>
-                  </div>
-                </>
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'flex-end' } }}>
+                  <Button
+                    component={Link} to="/login"
+                    size="large"
+                    variant="contained"
+                    sx={{ m: 2, color: 'white', display: 'block'}}
+                  >
+                    Log in
+                  </Button>
+                  <Button
+                    component={Link} to="/signup"
+                    size="large"
+                    variant="outlined"
+                    sx={{ my: 2, color: 'black', display: 'block'}}
+                  >
+                    Register
+                  </Button>
+                </Box>
               )}
-              <Outlet />
-            </nav>
-          </Toolbar>
+            </Toolbar>
+          </Container>
         </AppBar>
       </Box>
     </>

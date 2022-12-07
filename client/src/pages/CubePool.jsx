@@ -10,6 +10,12 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useUser } from '../auth/useUser';
+import CardMedia from '@mui/material/CardMedia';
+import { CardActionArea, CardActions } from '@mui/material';
+
+
+import { experimentalStyled as styled } from '@mui/material/styles';
+import { ClassNames } from '@emotion/react';
 
 const socket = io();
 
@@ -81,58 +87,57 @@ export const CubePool = () => {
       ].indexOf(side) + 1
     );
   };
-
   return (
-    <Grid
-      container
-      component='main'
-      direction='row'
-      alignContent='center'
-      alignItems='center'
-      wrap='wrap'
+    <Grid container spacing={10}
+      direction="row"
+      justifyContent="space-evenly"
+      alignItems="flex-start"
     >
       <CssBaseline />
-      {availableCubes
-        ? availableCubes.map((cube) => (
-            <Grid item xs={4}>
-              <Card key={uuid()}>
-                <CardContent>
-                  <Typography gutterBottom variant='h6' component='div'>
-                    {cube.name} - {cube.cube_id}
-                  </Typography>
-                  <div
-                    style={{
-                      height: '100px',
-                      width: '100px',
-                      backgroundColor: `#${Math.floor(
-                        Math.random() * 16777215
-                      ).toString(16)}`,
-                    }}
-                  />
-                  <Typography>Current Side: {cube.currentSide}</Typography>
-                  {Object.entries(cube.config).map(([key, value, index]) => (
-                    <Grid item sx={3}>
-                      <Box>{parseSides(key)}</Box>
-                      {Object.entries(value).map(([key, value]) => (
-                        <Typography>
-                          {key}: {value}
-                        </Typography>
-                      ))}
-                    </Grid>
+      {availableCubes ? availableCubes.map((cube) => (
+        <Grid item xs={12} sm={6} md={4}
+        sx={{mx: 2}}
+      >
+        <Card sx={{ maxWidth: 500 }}>
+          <CardActionArea>
+            <CardMedia  component="img"
+              height="140"
+              alt={cube.name}
+              sx={{
+                  backgroundColor: `#${Math.floor(
+                    Math.random() * 16777215
+                  ).toString(16)}`
+              }}
+            />
+            <CardContent>
+              <Typography>
+                Current Side: {cube.currentSide}
+              </Typography>
+              {Object.entries(cube.config).map(([key, value, index]) => (
+                <Grid item sx={3}>
+                  <Box>{parseSides(key)}</Box>
+                  {Object.entries(value).map(([key, value]) => (
+                    <Typography>
+                      {key}: {value}
+                    </Typography>
                   ))}
+                </Grid>
+              ))}
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="primary"
+              onClick={() => {
+                onClickOwnCube(cube);
+              }}
+            >
+              OWN ME
+            </Button>
+          </CardActions>
+        </Card>
+      </Grid>
+      )):null}
 
-                  <Button
-                    onClick={() => {
-                      onClickOwnCube(cube);
-                    }}
-                  >
-                    Own now!
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))
-        : null}
     </Grid>
   );
 };

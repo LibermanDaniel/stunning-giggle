@@ -15,8 +15,7 @@ import Stack from '@mui/material/Stack';
 import FormControl from '@mui/material/FormControl';
 import { ImageList, Input, p } from '@mui/material';
 
-import { ForgotPasswordLanding } from './ForgotPasswordLanding'
-
+import { ForgotPasswordLanding } from './ForgotPasswordLanding';
 
 const theme = createTheme({
   palette: {
@@ -89,8 +88,20 @@ export const UserPage = () => {
     setEmailChange(!emailChange);
   };
 
-  const resetEmailButton = () => {
-    console.log("reset")
+  const resetPassword = () => {
+    console.log('reset');
+  };
+
+  const EmailChange = () => {
+    return (
+      <FormControl sx={{ m: 3, minWidth: `${userData.email.length}ch` }}>
+        <input type='text' placeholder={userData.email} />
+      </FormControl>
+    );
+  };
+
+  const handleSaveUsernameButton = () => {
+    console.log('save Username');
   };
 
 
@@ -127,25 +138,13 @@ export const UserPage = () => {
       >
         <CssBaseline>
           <UploadAndDisplayImage />
-          <Box
-
-        sx={{
-          marginTop: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-      
-
-          <Stack direction='row' spacing={1} mt={2}>
+          <Stack direction='row' spacing={1} mt={1}>
             <Typography component='h5'>USERNAME：</Typography>
             <Typography component='b1'>{userData?.username}</Typography>
           </Stack>
 
           <Stack direction='row' spacing={1} mt={1}>
             <Typography component='b1'>EMAIL：</Typography>
-
             {emailChange
               ? (() => (
                   <>
@@ -169,9 +168,9 @@ export const UserPage = () => {
                   </>
                 ))()}
           </Stack>
-</Box>
-          <Button variant='contained' color='#primary' onClick={resetEmailButton}>
-              Reset Password
+
+          <Button variant='contained' color='#primary' onClick={resetPassword}>
+            Reset Password
           </Button>
         </CssBaseline>
       </Box>

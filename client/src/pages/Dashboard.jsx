@@ -4,23 +4,34 @@ import axios from 'axios';
 import lodash from 'lodash';
 import Select from 'react-select';
 
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import Cube from '../components/Cube';
+
 import { useNavigate } from 'react-router-dom';
 import { useToken } from '../auth/useToken';
 import { useUserStore } from '../common/useUserStore';
 import { useForm, Controller } from 'react-hook-form';
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import Typography from '@mui/material/Typography';
-import Input from '@mui/material/Input';
-import Checkbox from '@mui/material/Checkbox';
+import {
+  Tabs,
+  Tab,
+  Box,
+  Collapse,
+  Button,
+  FormControl,
+  Typography,
+  Input,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  CssBaseline,
+} from '@mui/material';
+
 import SevereColdTwoToneIcon from '@mui/icons-material/SevereColdTwoTone';
 import AcUnitTwoToneIcon from '@mui/icons-material/AcUnitTwoTone';
 import CloudTwoToneIcon from '@mui/icons-material/CloudTwoTone';
 import WbSunnyTwoToneIcon from '@mui/icons-material/WbSunnyTwoTone';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { Grid } from '@mui/material';
 
 import parameters from './resources/parameters.json';
 import cubeSides from './resources/cubeSides.json';
@@ -29,7 +40,8 @@ import { LineCharts } from './LineCharts';
 
 const Dashboard = () => {
   const [parameter, setParameter] = useState('');
-  const [options, setOptions] = useState([]);
+  const [expand, setExpand] = useState(false);
+  const [tab, setTab] = useState(0);
   const [checked, setChecked] = useState([false, false]);
   const [notifications, setNotifications] = useState({
     lamp: false,
@@ -122,7 +134,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     (async () => {
-      let tempFilter;
       if (user) {
         const { data } = await axios.post(
           '/api/owned-cubes',
@@ -131,28 +142,21 @@ const Dashboard = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        tempFilter = data.map((cubeData) => ({
-          value: cubeData.name,
-          label: toTitleCase(cubeData.name.replaceAll('_', ' ')),
-        }));
+
         setCubes(data);
-        setOptions(tempFilter);
       }
     })();
   }, [token, user]);
 
-  useEffect(() => {
-    if (cube) {
-      const [selectedCube] = cubes.filter(
-        (cubeForm) => cubeForm.name === cube.value
-      );
-      setFormDetails({
-        cube_id: selectedCube.cube_id,
-        id: selectedCube.id,
-        user: selectedCube.user,
-      });
-    }
-  }, [cube, cubes]);
+  const handleChange = (e, v) => {
+    setTab(v);
+    setExpand(true);
+    const [selectedCube] = cubes.filter((availableCube) => {
+      console.log(`Name: ${availableCube.name}\nText: ${e.target.innerText}`);
+      return availableCube.name === e.target.innerText.toLowerCase();
+    });
+    setCube(selectedCube);
+  };
 
   const functionSelect = () => {
     switch (parameter.value) {
@@ -201,7 +205,7 @@ const Dashboard = () => {
       case 'notifications':
         return (
           <FormControl>
-            <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', ml: 3 }}>
               <FormControlLabel
                 label='Lamp'
                 control={
@@ -211,8 +215,6 @@ const Dashboard = () => {
                   />
                 }
               />
-
-              {notifications.lamp ? notifcationLamp() : null}
               <FormControlLabel
                 label='Vibration'
                 control={
@@ -235,6 +237,7 @@ const Dashboard = () => {
                 }
               />
             </Box>
+            {notifications.lamp ? notifcationLamp() : null}
           </FormControl>
         );
 
@@ -300,69 +303,52 @@ const Dashboard = () => {
     console.log(weather.temperature);
     if (parseInt(weather.temperature) >= 25) {
       return (
-        <Grid>
-          <Box item='true' xs={6} style={{ width: '300px' }}>
-            <Typography> Country: {weather.country}</Typography>
-            <Typography>
-              Temperature: {weather.temperature}°C
-              <WbSunnyTwoToneIcon
-                color={'error'}
-                style={{ paddingTop: '5px' }}
-              />
-            </Typography>
-          </Box>
-        </Grid>
+        <Box item='true' style={{ width: '300px' }}>
+          <Typography> Country: {weather.country}</Typography>
+          <Typography>
+            Temperature: {weather.temperature}°C
+            <WbSunnyTwoToneIcon color={'error'} style={{ paddingTop: '5px' }} />
+          </Typography>
+        </Box>
       );
     } else if (
       parseInt(weather.temperature) >= 10 &&
       weather.temperature < 25
     ) {
       return (
-        <Grid>
-          <Box item='true' xs={6} style={{ width: '300px' }}>
-            <Typography> Country: {weather.country}</Typography>
-            <Typography>
-              {' '}
-              Temperature: {weather.temperature}°C
-              <CloudTwoToneIcon
-                color={'warning'}
-                style={{ paddingTop: '5px' }}
-              />
-            </Typography>
-          </Box>
-        </Grid>
+        <Box item='true' style={{ width: '400px' }}>
+          <Typography variant='h6'> Country: {weather.country}</Typography>
+          <Typography variant='h6'>
+            Temperature: {weather.temperature}°C
+            <CloudTwoToneIcon color={'warning'} style={{ paddingTop: '5px' }} />
+          </Typography>
+        </Box>
       );
     } else if (parseInt(weather.temperature) >= 0 && weather.temperature < 10) {
       return (
-        <Grid>
-          <Box item='true' xs={6} style={{ width: '300px' }}>
-            <Typography> Country: {weather.country}</Typography>
-            <Typography>
-              {' '}
-              Temperature: {weather.temperature}°C
-              <AcUnitTwoToneIcon
-                color={'primary'}
-                style={{ paddingTop: '5px' }}
-              />
-            </Typography>
-          </Box>
-        </Grid>
+        <Box item='true' style={{ width: '400px' }}>
+          <Typography variant='h6'> Country: {weather.country}</Typography>
+          <Typography variant='h6'>
+            Temperature: {weather.temperature}°C
+            <AcUnitTwoToneIcon
+              color={'primary'}
+              style={{ paddingTop: '5px' }}
+            />
+          </Typography>
+        </Box>
       );
     } else {
       return (
-        <Grid>
-          <Box item='true' xs={6} style={{ width: '300px' }}>
-            <Typography> Country: {weather.country}</Typography>
-            <Typography>
-              {' '}
-              Temperature: {weather.temperature}°C
-              <SevereColdTwoToneIcon
-                color={'info'}
-                style={{ paddingTop: '5px' }}
-              />
-            </Typography>
-          </Box>
-        </Grid>
+        <Box item='true' style={{ width: '400px' }}>
+          <Typography variant='h6'> Country: {weather.country}</Typography>
+          <Typography variant='h6'>
+            Temperature: {weather.temperature}°C
+            <SevereColdTwoToneIcon
+              color={'info'}
+              style={{ paddingTop: '5px' }}
+            />
+          </Typography>
+        </Box>
       );
     }
   };
@@ -373,7 +359,7 @@ const Dashboard = () => {
         <FormControl key={uuid()}>
           {functionSelect()}
           <FormControl>
-            <FormControl margin='dense'>
+            <FormControl margin='dense' sx={{ minWidth: 300 }}>
               <Typography variant='h6' gutterBottom>
                 Select Cube Side:
               </Typography>
@@ -406,62 +392,89 @@ const Dashboard = () => {
   };
 
   return (
-    <>
-      <Box display='flex' justifyContent='center' alignItems='center'>
-        <Typography variant='h1' gutterBottom>
-          WELCOME TO THE DASHBOARD
-        </Typography>
-      </Box>
+    <Grid
+      container
+      component='main'
+      direction='row'
+      alignContent='center'
+      alignItems='center'
+      wrap='wrap'
+    >
+      <CssBaseline />
 
-      <FormControl sx={{minWidth: 275 }}>
-        <Typography variant='h6' gutterBottom>
-          Select cube
-        </Typography>
-        <Controller
-          name='selectCube'
-          control={control}
-          render={({ field }) => (
-            <Select
-              id='dropDownSelectCube'
-              label='Select Cube'
-              variant='outlined'
-              autoWidth={true}
-              defaultValue={cube}
-              onChange={setCube}
-              options={options}
-            />
-          )}
-        />
-      </FormControl>
-
-      {lodash.isEmpty(cube) ? null : (
-        <>
-          <FormControl sx={{ m: 3, minWidth: 150 }}>
-            <Typography variant='h6' gutterBottom>
-              Select Function
-            </Typography>
-            <Controller
-              name='selectFunction'
-              control={control}
-              render={({ field }) => (
-                <Select
-                  id='dropDownSelectFunction'
-                  label='Select Function'
-                  autoWidth
-                  variant='outlined'
-                  defaultValue={parameter}
-                  onChange={setParameter}
-                  options={parameters}
+      <Grid
+        item
+        xs={10}
+        lg={9}
+        sx={{ backgroundColor: '#CED0CB', margin: 'auto', paddingBottom: '1%' }}
+      >
+        <Tabs
+          value={tab}
+          onChange={handleChange}
+          variant='scrollable'
+          scrollButtons
+          allowScrollButtonsMobile
+        >
+          {cubes.map((cube) => (
+            <Tab label={cube.name} key={uuid()} />
+          ))}
+        </Tabs>
+        {console.log(`expand ${expand}\ncube ${cube}`)}
+        {lodash.isEmpty(cube) ? null : (
+          <Grid
+            container
+            direction='row'
+            alignContent='center'
+            alignItems='center'
+            sx={{
+              background: '#E8EAE6',
+              paddingTop: '2%',
+              paddingLeft: '10%',
+              paddingBottom: '2%',
+              boxShadow: 2,
+              borderRadius: 8,
+              width: '95%',
+              margin: 'auto',
+            }}
+          >
+            <Grid item xs={6} lg={4}>
+              <FormControl sx={{ minWidth: 300 }}>
+                <Typography variant='h6' gutterBottom>
+                  Select Function
+                </Typography>
+                <Controller
+                  name='selectFunction'
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      id='dropDownSelectFunction'
+                      label='Select Function'
+                      autoWidth
+                      variant='outlined'
+                      defaultValue={parameter}
+                      onChange={setParameter}
+                      options={parameters}
+                    />
+                  )}
                 />
-              )}
-            />
-          </FormControl>
-          {parameter ? formBuilder() : null}
-        </>
-      )}
-      {weather.temperature ? currentWeather() : null}
-      <LineCharts />
-    </>
+              </FormControl>
+              {parameter ? formBuilder() : null}
+              {weather.temperature ? currentWeather() : null}
+            </Grid>
+            <Grid item xs={6} lg={8}>
+              <Canvas style={{ height: '400px', paddingRight: '10%' }}>
+                <OrbitControls enableZoom={false} />
+                <ambientLight intensity={0.5} />
+                <directionalLight position={[-2, 5, 2]} intensity={1} />
+                <Cube />
+              </Canvas>
+            </Grid>
+          </Grid>
+        )}
+      </Grid>
+
+      <LineCharts style={{ margin: 'auto' }} />
+    </Grid>
   );
 };
 

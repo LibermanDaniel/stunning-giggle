@@ -66,7 +66,7 @@ const ownCube = async (req, res) => {
       console.log(availableCubes.length)
 
       if (result) {
-        jwt.sign({ id, username, isVerified, name, email }, config.jwtSecret, { expiresIn: '1h' }, (err, token) => {
+        jwt.sign({ id, username, isVerified, name, email }, config.jwtSecret, { expiresIn: '2d' }, (err, token) => {
           if (err) {
             res.status(200).json(err)
           }

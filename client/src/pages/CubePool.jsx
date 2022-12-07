@@ -12,11 +12,13 @@ import {
   CssBaseline,
   CardHeader,
 } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useUser } from '../auth/useUser';
+import { positions } from '@mui/system';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea, CardActions } from '@mui/material';
 
@@ -24,6 +26,19 @@ import { experimentalStyled as styled } from '@mui/material/styles';
 import { ClassNames } from '@emotion/react';
 
 const socket = io();
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#CFDBC7',
+      contrastText: '#FFFFFF',
+    },
+    secondary: {
+      main: '#7C9473',
+      contrastText: '#FFFFFF',
+    },
+  },
+});
 
 export const CubePool = () => {
   const user = useUser();
@@ -94,6 +109,7 @@ export const CubePool = () => {
     );
   };
   return (
+    <ThemeProvider theme={theme}>
     <Grid
       container
       spacing={10}
@@ -132,10 +148,10 @@ export const CubePool = () => {
                     sx={{
                       backgroundColor: `#${Math.floor(
                         Math.random() * 16777215
-                      ).toString(16)}`,
+                      ).toString(16)}`,justifyContent: 'center',alignContent: 'center',textAlign:'center' 
                     }}
                   />
-                  <CardContent sx={{ minWidth: 400 }}>
+                  <CardContent sx={{ minWidth: 400 ,justifyContent: 'center',alignContent: 'center',textAlign:'center' }} >
                     <Typography>Current Side: {cube.currentSide}</Typography>
                     {Object.entries(cube.config).map(([key, value, index]) => (
                       <Grid item xs={3}>
@@ -150,21 +166,25 @@ export const CubePool = () => {
                   </CardContent>
                 </CardActionArea>
                 <CardActions>
+                <Box alignItems="flex-end" >
                   <Button
                     size='small'
-                    color='primary'
+                    color='secondary'
                     onClick={() => {
                       onClickOwnCube(cube);
                     }}
-                    sx={{ display: 'absolute' }}
+                    sx={{ width:450,mt:10,position :'bottom'}}  
+                    
                   >
                     Take me!
                   </Button>
+                  </Box>
                 </CardActions>
               </Card>
             </Grid>
           ))
         : null}
     </Grid>
+    </ThemeProvider>
   );
 };

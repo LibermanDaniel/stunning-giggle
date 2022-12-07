@@ -18,7 +18,18 @@ import { Paper, Image } from '@mui/material';
 
 import '../styles/auth.css';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#7C9473',
+      contrastText: '#FFFFFF',
+    },
+    secondary: {
+      main: '#CFDBC7',
+      contrastText: '#FFFFFF',
+    },
+  },
+});
 
 export const SignUp = () => {
   const [, setToken] = useToken();

@@ -1,6 +1,7 @@
 import { Link, Outlet } from 'react-router-dom';
 import { useUserStore } from '../common/useUserStore';
 import { useToken } from '../auth/useToken';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React from 'react';
 
 import Box from '@mui/material/Box';
@@ -25,8 +26,22 @@ export const Navbar = () => {
   const main_c = "#7C9473"
   const pages = ['Products', 'Pricing', 'Blog'];
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#7C9473',
+        contrastText: '#FFFFFF',
+      },
+      secondary: {
+        main: '#CFDBC7',
+        contrastText: '#FFFFFF',
+      },
+    },
+  });
+  
   return (
     <>
+        <ThemeProvider  theme={theme}>
       <Box
         sx={{
           backgroundColor: '#7C9473',
@@ -61,6 +76,7 @@ export const Navbar = () => {
                   <Button
                     component={Link} to="/cube-pool"
                     size="large"
+
                     sx={{ my: 2, color: 'black', display: 'block', }}
                   >
                     Cube Pool
@@ -86,7 +102,7 @@ export const Navbar = () => {
                       component={Link} to="/"
                       size="large"
                       variant="outlined"
-                      sx={{ my: 2, color: 'black', display: 'block'}}
+                      sx={{ my: 2, color: 'Primary', display: 'block'}}
                       onClick={() => {
                         logOut();
                       }}
@@ -105,10 +121,10 @@ export const Navbar = () => {
                     Log in
                   </Button>
                   <Button
+                    variant="outlined"
                     component={Link} to="/signup"
                     size="large"
-                    variant="outlined"
-                    sx={{ my: 2, color: 'black', display: 'block'}}
+                    sx={{ my: 2, color: 'Primary', display: 'block'}}
                   >
                     Register
                   </Button>
@@ -118,6 +134,7 @@ export const Navbar = () => {
           </Container>
         </AppBar>
       </Box>
+      </ThemeProvider>
     </>
   );
 };

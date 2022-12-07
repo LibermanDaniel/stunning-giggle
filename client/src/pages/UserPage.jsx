@@ -105,13 +105,6 @@ export const UserPage = () => {
   };
 
 
-  const EmailChange = () => {
-    return (
-      <FormControl sx={{ m: 3, minWidth: `${userData.email.length}ch` }}>
-        <input type='text' placeholder={userData.email} />
-      </FormControl>
-    );
-  };
 
   useEffect(() => {
     (async () => {

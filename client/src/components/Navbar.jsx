@@ -54,7 +54,7 @@ export const Navbar = () => {
                   textDecoration: 'none',
                 }}
               >
-                GYROGAY
+                GYROCUBE
               </Typography>
               {user ? (
                 <><Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>

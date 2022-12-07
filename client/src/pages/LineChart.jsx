@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,

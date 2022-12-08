@@ -54,6 +54,11 @@ export const SignUp = () => {
     }
   };
 
+  const passwordValidator = (password) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+    return regex.test(password);
+  };
   const handleUsernameChange = (event) => {
     event.preventDefault();
     setUsername(event.target.value);
@@ -159,6 +164,13 @@ export const SignUp = () => {
                       autoComplete='new-password'
                       onChange={handlePasswordChange}
                     />
+                    {passwordValidator(password) ? null : (
+                      <p style={{ fontSize: 10, color: 'red' }}>
+                        * Must include one upper-case lower-case special
+                        character and one digit and must be at least 8
+                        characters long
+                      </p>
+                    )}
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
@@ -171,6 +183,11 @@ export const SignUp = () => {
                       autoComplete='new-password'
                       onChange={handleConfirmPassword}
                     />
+                    {password === confirmPassword ? null : (
+                      <p style={{ fontSize: 10, color: 'red' }}>
+                        * Passwords not matching
+                      </p>
+                    )}
                   </Grid>
                   <Grid item xs={12}></Grid>
                 </Grid>
